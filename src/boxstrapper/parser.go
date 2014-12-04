@@ -10,6 +10,10 @@ type Package struct {
 }
 
 func NewPackage(contents string) []Package {
+	if !strings.Contains(contents, ": ") {
+		return []Package{Package{Package: contents, Groups: []string{"default"}}}
+	}
+
 	parts := strings.SplitN(contents, ": ", 2)
 	pkg := parts[0]
 	groups := strings.Split(parts[1], ",")
