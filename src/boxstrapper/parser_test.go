@@ -28,6 +28,17 @@ func TestSinglePackage_PrefixWhitespace_NoGroups(t *testing.T) {
 	assert.Equal(t, "default", packages[0].Groups[0])
 }
 
+func TestSinglePackage_PostfixWhitespace_NoGroups(t *testing.T) {
+	s := "i3 "
+
+	packages := NewPackage(s)
+
+	assert.Equal(t, 1, len(packages))
+	assert.Equal(t, "i3", packages[0].Package)
+	assert.Equal(t, 1, len(packages[0].Groups))
+	assert.Equal(t, "default", packages[0].Groups[0])
+}
+
 func TestSinglePackageWithLeadingWhitespace(t *testing.T) {
 	s := "i3:  system"
 
