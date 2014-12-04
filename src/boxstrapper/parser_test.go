@@ -171,3 +171,23 @@ boxstrapper: dev, pork`
 	assert.Equal(t, "dev", packages[1].Groups[0])
 	assert.Equal(t, "pork", packages[1].Groups[1])
 }
+
+func TestMultiplePackages_EmptyThirdPackage(t *testing.T) {
+	s := `i3: system, long
+boxstrapper: dev, pork
+`
+
+	packages := NewPackage(s)
+
+	assert.Equal(t, 2, len(packages))
+
+	assert.Equal(t, "i3", packages[0].Package)
+	assert.Equal(t, 2, len(packages[0].Groups))
+	assert.Equal(t, "system", packages[0].Groups[0])
+	assert.Equal(t, "long", packages[0].Groups[1])
+
+	assert.Equal(t, "boxstrapper", packages[1].Package)
+	assert.Equal(t, 2, len(packages[1].Groups))
+	assert.Equal(t, "dev", packages[1].Groups[0])
+	assert.Equal(t, "pork", packages[1].Groups[1])
+}
