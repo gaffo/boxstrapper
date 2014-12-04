@@ -2,6 +2,7 @@ package boxstrapper
 
 import (
 	"strings"
+	"fmt"
 )
 
 type Package struct {
@@ -10,18 +11,33 @@ type Package struct {
 }
 
 func NewPackage(contents string) []Package {
-	if !strings.Contains(contents, ": ") {
-		contents = strings.TrimSpace(contents)
-		return []Package{Package{Package: contents, Groups: []string{"default"}}}
-	}
+	lines := strings.Split(contents, "\n")
+	fmt.Println(lines)
 
-	parts := strings.SplitN(contents, ": ", 2)
-	pkg := parts[0]
-	pkg = strings.TrimSpace(pkg)
-	groups := strings.Split(parts[1], ",")
-	for i, group := range(groups) {
-		groups[i] = strings.TrimSpace(group)
-	}
+	packages := make([]Package, 0, len(lines))
 
-	return []Package{Package{Package: pkg, Groups: groups}}
+	for _, line := range(lines) {
+		fmt.Println(">", line)
+		if line == "" {
+			fmt.Println("Empty")
+			continue
+		}
+
+		if !strings.Contains(line, ": ") {
+			fmt.Println("Solo")
+			line = strings.TrimSpace(line)
+			packages = append(packages, Package{Package: line, Groups: []string{"default"}})
+			continue
+		}
+
+		parts := strings.SplitN(line, ": ", 2)
+		pkg := parts[0]
+		pkg = strings.TrimSpace(pkg)
+		groups := strings.Split(parts[1], ",")
+		for i, group := range(groups) {
+			groups[i] = strings.TrimSpace(group)
+		}
+		packages = append(packages, Package{Package: pkg, Groups: groups})
+	}
+	return packages
 }
