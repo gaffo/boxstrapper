@@ -62,3 +62,15 @@ func TestSinglePackage_MultipleGroups_PrefixWhitespace(t *testing.T) {
 	assert.Equal(t, "system", packages[0].Groups[0])
 	assert.Equal(t, "boxstrapper", packages[0].Groups[1])
 }
+	
+func TestSinglePackage_MultipleGroups_PostfixWhitespace(t *testing.T) {
+	s := "i3: system, boxstrapper "
+
+	packages := NewPackage(s)
+
+	assert.Equal(t, 1, len(packages))
+	assert.Equal(t, "i3", packages[0].Package)
+	assert.Equal(t, 2, len(packages[0].Groups))
+	assert.Equal(t, "system", packages[0].Groups[0])
+	assert.Equal(t, "boxstrapper", packages[0].Groups[1])
+}
