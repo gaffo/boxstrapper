@@ -10,7 +10,7 @@ type Package struct {
 	Groups []string
 }
 
-func NewPackage(contents string) []Package {
+func ParsePackages(contents string) []Package {
 	lines := strings.Split(contents, "\n")
 	fmt.Println(lines)
 

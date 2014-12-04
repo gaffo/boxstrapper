@@ -9,7 +9,7 @@ import (
 func TestSinglePackage_NoGroups(t *testing.T) {
 	s := "i3"
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 1, len(packages))
 	assert.Equal(t, "i3", packages[0].Package)
@@ -20,7 +20,7 @@ func TestSinglePackage_NoGroups(t *testing.T) {
 func TestSinglePackage_PrefixWhitespace_NoGroups(t *testing.T) {
 	s := " i3"
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 1, len(packages))
 	assert.Equal(t, "i3", packages[0].Package)
@@ -31,7 +31,7 @@ func TestSinglePackage_PrefixWhitespace_NoGroups(t *testing.T) {
 func TestSinglePackage_PostfixWhitespace_NoGroups(t *testing.T) {
 	s := "i3 "
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 1, len(packages))
 	assert.Equal(t, "i3", packages[0].Package)
@@ -42,7 +42,7 @@ func TestSinglePackage_PostfixWhitespace_NoGroups(t *testing.T) {
 func TestSinglePackageWithLeadingWhitespace(t *testing.T) {
 	s := "i3:  system"
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 1, len(packages))
 	assert.Equal(t, "i3", packages[0].Package)
@@ -53,7 +53,7 @@ func TestSinglePackageWithLeadingWhitespace(t *testing.T) {
 func TestSinglePackage_PrefixWhitespace_WithGroup(t *testing.T) {
 	s := " i3: system"
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 1, len(packages))
 	assert.Equal(t, "i3", packages[0].Package)
@@ -64,7 +64,7 @@ func TestSinglePackage_PrefixWhitespace_WithGroup(t *testing.T) {
 func TestSinglePackage_PostfixWhitespace_WithGroup(t *testing.T) {
 	s := "i3 : system"
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 1, len(packages))
 	assert.Equal(t, "i3", packages[0].Package)
@@ -75,7 +75,7 @@ func TestSinglePackage_PostfixWhitespace_WithGroup(t *testing.T) {
 func TestSinglePackageWithTrailingWhitespace(t *testing.T) {
 	s := "i3: system "
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 1, len(packages))
 	assert.Equal(t, "i3", packages[0].Package)
@@ -86,7 +86,7 @@ func TestSinglePackageWithTrailingWhitespace(t *testing.T) {
 func TestSinglePackage_MultipleGroups(t *testing.T) {
 	s := "i3: system, boxstrapper"
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 1, len(packages))
 	assert.Equal(t, "i3", packages[0].Package)
@@ -98,7 +98,7 @@ func TestSinglePackage_MultipleGroups(t *testing.T) {
 func TestSinglePackage_MultipleGroups_PrefixWhitespace(t *testing.T) {
 	s := "i3: system,  boxstrapper"
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 1, len(packages))
 	assert.Equal(t, "i3", packages[0].Package)
@@ -110,7 +110,7 @@ func TestSinglePackage_MultipleGroups_PrefixWhitespace(t *testing.T) {
 func TestSinglePackage_MultipleGroups_PostfixWhitespace(t *testing.T) {
 	s := "i3: system, boxstrapper "
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 1, len(packages))
 	assert.Equal(t, "i3", packages[0].Package)
@@ -123,7 +123,7 @@ func TestMultiplePackages_DefaultGroups(t *testing.T) {
 	s := `i3
 boxstrapper`
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 2, len(packages))
 
@@ -140,7 +140,7 @@ func TestMultiplePackages_SingleGroups(t *testing.T) {
 	s := `i3: system
 boxstrapper: dev`
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 2, len(packages))
 
@@ -157,7 +157,7 @@ func TestMultiplePackages_MultipleGroups(t *testing.T) {
 	s := `i3: system, long
 boxstrapper: dev, pork`
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 2, len(packages))
 
@@ -177,7 +177,7 @@ func TestMultiplePackages_EmptyThirdPackage(t *testing.T) {
 boxstrapper: dev, pork
 `
 
-	packages := NewPackage(s)
+	packages := ParsePackages(s)
 
 	assert.Equal(t, 2, len(packages))
 
