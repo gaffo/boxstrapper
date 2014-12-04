@@ -17,6 +17,7 @@ func NewPackage(contents string) []Package {
 
 	parts := strings.SplitN(contents, ": ", 2)
 	pkg := parts[0]
+	pkg = strings.TrimSpace(pkg)
 	groups := strings.Split(parts[1], ",")
 	for i, group := range(groups) {
 		groups[i] = strings.TrimSpace(group)
