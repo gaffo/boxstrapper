@@ -11,6 +11,7 @@ type Package struct {
 
 func NewPackage(contents string) []Package {
 	if !strings.Contains(contents, ": ") {
+		contents = strings.TrimSpace(contents)
 		return []Package{Package{Package: contents, Groups: []string{"default"}}}
 	}
 
