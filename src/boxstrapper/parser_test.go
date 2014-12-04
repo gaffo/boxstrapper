@@ -50,7 +50,7 @@ func TestSinglePackageWithLeadingWhitespace(t *testing.T) {
 	assert.Equal(t, "system", packages[0].Groups[0])
 }
 
-func TestSinglePackage_LeadingWhitespace_WithGroup(t *testing.T) {
+func TestSinglePackage_LeadinWhitespace_WithGroup(t *testing.T) {
 	s := " i3: system"
 
 	packages := NewPackage(s)
@@ -61,6 +61,16 @@ func TestSinglePackage_LeadingWhitespace_WithGroup(t *testing.T) {
 	assert.Equal(t, "system", packages[0].Groups[0])
 }
 
+func TestSinglePackage_PostfixWhitespace_WithGroup(t *testing.T) {
+	s := "i3 : system"
+
+	packages := NewPackage(s)
+
+	assert.Equal(t, 1, len(packages))
+	assert.Equal(t, "i3", packages[0].Package)
+	assert.Equal(t, 1, len(packages[0].Groups))
+	assert.Equal(t, "system", packages[0].Groups[0])
+}
 
 func TestSinglePackageWithTrailingWhitespace(t *testing.T) {
 	s := "i3: system "
