@@ -2,7 +2,7 @@ package boxstrapper_test
 
 import (
 	"testing"
-	. "boxstrapper"
+	. "github.com/gaffo/boxstrapper"
   	"github.com/stretchr/testify/assert"
 )
 
