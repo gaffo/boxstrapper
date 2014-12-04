@@ -12,4 +12,7 @@ func TestSinglePackage(t *testing.T) {
 	packages := NewPackage(s)
 
 	assert.Equal(t, 1, len(packages))
+	assert.Equal(t, "i3", packages[0].Package)
+	assert.Equal(t, 1, len(packages[0].Groups))
+	assert.Equal(t, "system", packages[0].Groups[0])
 }
