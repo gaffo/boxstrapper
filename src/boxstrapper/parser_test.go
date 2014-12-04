@@ -50,7 +50,7 @@ func TestSinglePackageWithLeadingWhitespace(t *testing.T) {
 	assert.Equal(t, "system", packages[0].Groups[0])
 }
 
-func TestSinglePackage_LeadinWhitespace_WithGroup(t *testing.T) {
+func TestSinglePackage_PrefixWhitespace_WithGroup(t *testing.T) {
 	s := " i3: system"
 
 	packages := NewPackage(s)
