@@ -27,6 +27,7 @@ func TestSinglePackage_PrefixWhitespace_NoGroups(t *testing.T) {
 	assert.Equal(t, 1, len(packages[0].Groups))
 	assert.Equal(t, "default", packages[0].Groups[0])
 }
+
 func TestSinglePackageWithLeadingWhitespace(t *testing.T) {
 	s := "i3:  system"
 
