@@ -7,3 +7,8 @@ import (
 type Driver interface {
 	AddPackage(packageName string) error
 }
+
+type Storage interface {
+	ReadPackages() (string, error)
+	WritePackages(contents string) error
+}

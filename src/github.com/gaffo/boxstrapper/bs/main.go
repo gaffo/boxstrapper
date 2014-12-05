@@ -17,10 +17,11 @@ func main() {
 	 }
 
 	 driver := UbuntuDriver{}
+	 storage := FilesystemStorage{}
 
 	 switch os.Args[1] {
 	 case "ap":
-	 	Ap(driver, os.Args[2:])
+	 	Ap(driver, storage, os.Args[2:])
 	 	return
 	 default:
 	 	usage()

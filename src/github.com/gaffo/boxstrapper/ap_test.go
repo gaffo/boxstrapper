@@ -4,42 +4,39 @@ import (
 	"testing"
 	. "github.com/gaffo/boxstrapper"
   	"github.com/stretchr/testify/assert"
-  	"github.com/stretchr/testify/mock"
+  	"github.com/gaffo/boxstrapper/mocks"
 )
-
-type MockDriver struct {
-	mock.Mock
-}
-
-func (m *MockDriver) AddPackage(packageName string) error {
-	ret := m.Called(packageName)
-	r0 := ret.Error(0)
-	return r0
-}
 
 func TestApCallsToDriver(t *testing.T) {
 	assert := assert.New(t)
 
 	packages := []string{"package1"}
-	driver := new(MockDriver)
+	driver := new(mocks.Driver)
 	driver.On("AddPackage", "package1").Return(nil).Once()
+
+	storage := new(mocks.Storage)
+	storage.On("WritePackages", "package1: default").Return(nil).Once()
 	
-	err := Ap(driver, packages)
+	err := Ap(driver, storage, packages)
 
 	assert.Nil(err)
 	driver.Mock.AssertExpectations(t)
+	storage.Mock.AssertExpectations(t)
 }
 
 func TestApCallsToDriver_MultiplePackages(t *testing.T) {
-	assert := assert.New(t)
+	// assert := assert.New(t)
 
-	packages := []string{"package1", "package2"}
-	driver := new(MockDriver)
-	driver.On("AddPackage", "package1").Return(nil).Once()
-	driver.On("AddPackage", "package2").Return(nil).Once()
+	// packages := []string{"package1", "package2"}
+	// driver := new(mocks.Driver)
+	// driver.On("AddPackage", "package1").Return(nil).Once()
+	// driver.On("AddPackage", "package2").Return(nil).Once()
+
+	// storage := new(mocks.Storage)
 	
-	err := Ap(driver, packages)
+	// err := Ap(driver, storage, packages)
 
-	assert.Nil(err)
-	driver.Mock.AssertExpectations(t)
+	// assert.Nil(err)
+	// driver.Mock.AssertExpectations(t)
+	// storage.Mock.AssertExpectations(t)
 }
