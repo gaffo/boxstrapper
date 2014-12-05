@@ -16,6 +16,12 @@ func (this Package) String() string {
 	return fmt.Sprintf("%s: %s", this.Package, strings.Join(this.Groups, ", "))
 }
 
+type ByPackageName []Package
+
+func (a ByPackageName) Len() int           { return len(a) }
+func (a ByPackageName) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByPackageName) Less(i, j int) bool { return a[i].Package < a[j].Package }
+
 type Packages struct {
 	Packages []Package
 }
