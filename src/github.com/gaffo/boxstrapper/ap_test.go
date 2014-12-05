@@ -79,24 +79,24 @@ func TestApCallsToDriver_WithSingleGroup(t *testing.T) {
 	storage.Mock.AssertExpectations(t)
 }
 
-// func TestApCallsToDriver_MultiplePackages_WithSingleGroup(t *testing.T) {
-// 	assert := assert.New(t)
+func TestApCallsToDriver_MultiplePackages_WithSingleGroup(t *testing.T) {
+	assert := assert.New(t)
 
-// 	packages := []string{"package1", "package2"}
-// 	driver := new(mocks.Driver)
-// 	driver.On("AddPackage", "package1").Return(nil).Once()
-// 	driver.On("AddPackage", "package2").Return(nil).Once()
+	packages := []string{"package1:george", "package2:system"}
+	driver := new(mocks.Driver)
+	driver.On("AddPackage", "package1").Return(nil).Once()
+	driver.On("AddPackage", "package2").Return(nil).Once()
 
-// 	storage := new(mocks.Storage)
-// 	storage.On("WritePackages", `package1: default
-// package2: default`).Return(nil).Once()
+	storage := new(mocks.Storage)
+	storage.On("WritePackages", `package1: george
+package2: system`).Return(nil).Once()
 	
-// 	err := Ap(driver, storage, packages)
+	err := Ap(driver, storage, packages)
 
-// 	assert.Nil(err)
-// 	driver.Mock.AssertExpectations(t)
-// 	storage.Mock.AssertExpectations(t)
-// }
+	assert.Nil(err)
+	driver.Mock.AssertExpectations(t)
+	storage.Mock.AssertExpectations(t)
+}
 
 // func TestApCallsToDriver_MultiplePackages_UnsortedPackages_WithSingleGroup(t *testing.T) {
 // 	assert := assert.New(t)
