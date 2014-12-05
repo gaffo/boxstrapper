@@ -233,3 +233,15 @@ func TestPackages_Print(t *testing.T) {
 
 	assert.Equal("pkg: g1, g2", result)
 }
+
+func TestPackages_MultiplePackages(t *testing.T) {
+	assert := assert.New(t)
+	packages := Packages{}
+	packages.Add(Package{Package: "pkg", Groups: []string{"g1", "g2"}})
+	packages.Add(Package{Package: "pkg2", Groups: []string{"g4", "g3"}})
+
+	result := packages.String()
+
+	assert.Equal(`pkg: g1, g2
+pkg2: g3, g4`, result)
+}
