@@ -11,7 +11,20 @@ type Package struct {
 	Groups []string
 }
 
+func removeDuplicates(a []string) []string {
+    result := []string{}
+    seen := map[string]string{}
+    for _, val := range a {
+            if _, ok := seen[val]; !ok {
+                    result = append(result, val)
+                    seen[val] = val
+            }
+    }
+    return result
+} 
+
 func (this Package) String() string {
+	this.Groups = removeDuplicates(this.Groups)
 	sort.Strings(this.Groups)
 	return fmt.Sprintf("%s: %s", this.Package, strings.Join(this.Groups, ", "))
 }

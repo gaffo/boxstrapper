@@ -2,22 +2,43 @@ package boxstrapper
 
 import (
 	"sort"
-	"strings"
-	"fmt"
 )
 
 func Ap(driver Driver, storage Storage, packages []string) error {
-	pkgContents := make([]string, 0, len(packages))
+	// Load prevoius packages
+	strPrexist, _ := storage.ReadPackages()
+	mpPkgnamePkg := make(map[string]Package)
+	aPackages := ParsePackages(strPrexist)
+	for _, pkg := range(aPackages) {
+		mpPkgnamePkg[pkg.Package] = pkg
+	}
+
+	// Install Packages
 	for _, pkgStr := range(packages) {
 		pkg := PackageFromApString(pkgStr)
 		driver.AddPackage(pkg.Package)
-		sPkg := pkg.String()
-		pkgContents = append(pkgContents, sPkg)
+		if oldPkg, ok := mpPkgnamePkg[pkg.Package]; ok {
+			pkg.Groups = append(oldPkg.Groups, pkg.Groups...)
+		}
+		mpPkgnamePkg[pkg.Package] = pkg
 	}
 
-	sort.Strings(pkgContents)
-	fmt.Println(">", pkgContents)
-	sPkgContents := strings.Join(pkgContents, "\n")
-	storage.WritePackages(sPkgContents)
+	// sort the packages
+	aPackages = make([]Package, 0, len(mpPkgnamePkg))
+	for _, pkg := range(mpPkgnamePkg) {
+		aPackages = append(aPackages, pkg)
+	}
+	sort.Sort(ByPackageName(aPackages))
+
+	// output the packages to file again
+	sRet := ""
+	for i, pkg := range aPackages {
+		if i != 0 {
+			sRet += "\n"
+		}
+		sRet += pkg.String()
+	}
+	storage.WritePackages(sRet)
+	
 	return nil
 }

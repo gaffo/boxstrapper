@@ -12,9 +12,10 @@ func TestApCallsToDriver(t *testing.T) {
 
 	packages := []string{"package1"}
 	driver := new(mocks.Driver)
-	driver.On("AddPackage", "package1").Return(nil).Once()
+	driver.On("AddPackage", "package1").Return(nil)
 
 	storage := new(mocks.Storage)
+	storage.On("ReadPackages").Return("", nil)
 	storage.On("WritePackages", "package1: default").Return(nil).Once()
 	
 	err := Ap(driver, storage, packages)
@@ -33,6 +34,7 @@ func TestApCallsToDriver_MultiplePackages(t *testing.T) {
 	driver.On("AddPackage", "package2").Return(nil).Once()
 
 	storage := new(mocks.Storage)
+	storage.On("ReadPackages").Return("", nil)
 	storage.On("WritePackages", `package1: default
 package2: default`).Return(nil).Once()
 	
@@ -52,6 +54,7 @@ func TestApCallsToDriver_MultiplePackages_UnsortedPackages(t *testing.T) {
 	driver.On("AddPackage", "package2").Return(nil).Once()
 
 	storage := new(mocks.Storage)
+	storage.On("ReadPackages").Return("", nil)
 	storage.On("WritePackages", `package1: default
 package2: default`).Return(nil).Once()
 	
@@ -70,6 +73,7 @@ func TestApCallsToDriver_WithSingleGroup(t *testing.T) {
 	driver.On("AddPackage", "package1").Return(nil).Once()
 
 	storage := new(mocks.Storage)
+	storage.On("ReadPackages").Return("", nil)
 	storage.On("WritePackages", "package1: system").Return(nil).Once()
 	
 	err := Ap(driver, storage, packages)
@@ -88,6 +92,7 @@ func TestApCallsToDriver_MultiplePackages_WithSingleGroup(t *testing.T) {
 	driver.On("AddPackage", "package2").Return(nil).Once()
 
 	storage := new(mocks.Storage)
+	storage.On("ReadPackages").Return("", nil)
 	storage.On("WritePackages", `package1: george
 package2: system`).Return(nil).Once()
 	
@@ -107,8 +112,64 @@ func TestApCallsToDriver_MultiplePackages_UnsortedPackages_WithSingleGroup(t *te
 	driver.On("AddPackage", "package2").Return(nil).Once()
 
 	storage := new(mocks.Storage)
+	storage.On("ReadPackages").Return("", nil)
 	storage.On("WritePackages", `package1: george
 package2: system`).Return(nil).Once()
+	
+	err := Ap(driver, storage, packages)
+
+	assert.Nil(err)
+	driver.Mock.AssertExpectations(t)
+	storage.Mock.AssertExpectations(t)
+}
+
+func TestAp_WithDifferentPreexisting_DoesntLosePrexisting(t *testing.T) {
+	assert := assert.New(t)
+
+	packages := []string{"package1"}
+	driver := new(mocks.Driver)
+	driver.On("AddPackage", "package1").Return(nil).Once()
+
+	storage := new(mocks.Storage)
+	storage.On("ReadPackages").Return("package2: default", nil)
+	storage.On("WritePackages", `package1: default
+package2: default`).Return(nil).Once()
+	
+	err := Ap(driver, storage, packages)
+
+	assert.Nil(err)
+	driver.Mock.AssertExpectations(t)
+	storage.Mock.AssertExpectations(t)
+}
+
+func TestAp_PreExistingGroup_IsntAddedToFile(t *testing.T) {
+	assert := assert.New(t)
+
+	packages := []string{"package1"}
+	driver := new(mocks.Driver)
+	driver.On("AddPackage", "package1").Return(nil).Once()
+
+	storage := new(mocks.Storage)
+	storage.On("ReadPackages").Return("package1", nil)
+	storage.On("WritePackages", `package1: default`).Return(nil).Once()
+	
+	err := Ap(driver, storage, packages)
+
+	assert.Nil(err)
+	driver.Mock.AssertExpectations(t)
+	storage.Mock.AssertExpectations(t)
+}
+
+func TestAp_PreExistingPackage_NewGroup_MergesGroups(t *testing.T) {
+	assert := assert.New(t)
+
+	packages := []string{"package1:system"}
+	driver := new(mocks.Driver)
+	driver.On("AddPackage", "package1").Return(nil).Once()
+
+	storage := new(mocks.Storage)
+	storage.On("ReadPackages").Return("package1: default", nil)
+	storage.On("WritePackages", `package1: default, system`).Return(nil).Once()
 	
 	err := Ap(driver, storage, packages)
 

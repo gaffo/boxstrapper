@@ -24,6 +24,12 @@ func TestPackageToString_TwoGroupsAlphabetize(t *testing.T) {
 	assert.Equal("hi: default, system", pkg.String())
 }
 
+func TestPackageToString_ToGroupsDuplicate(t *testing.T) {
+	assert := assert.New(t)
+	pkg := Package{Package: "hi", Groups: []string{"system", "system"}}
+	assert.Equal("hi: system", pkg.String())
+}
+
 func TestSinglePackage_NoGroups(t *testing.T) {
 	assert := assert.New(t)
 	s := "i3"
