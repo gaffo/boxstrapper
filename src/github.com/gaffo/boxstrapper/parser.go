@@ -2,7 +2,6 @@ package boxstrapper
 
 import (
 	"strings"
-	"fmt"
 )
 
 type Package struct {
@@ -12,19 +11,15 @@ type Package struct {
 
 func ParsePackages(contents string) []Package {
 	lines := strings.Split(contents, "\n")
-	fmt.Println(lines)
 
 	packages := make([]Package, 0, len(lines))
 
 	for _, line := range(lines) {
-		fmt.Println(">", line)
 		if line == "" {
-			fmt.Println("Empty")
 			continue
 		}
 
 		if !strings.Contains(line, ": ") {
-			fmt.Println("Solo")
 			line = strings.TrimSpace(line)
 			packages = append(packages, Package{Package: line, Groups: []string{"default"}})
 			continue
