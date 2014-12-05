@@ -16,6 +16,14 @@ func (this Package) String() string {
 	return fmt.Sprintf("%s: %s", this.Package, strings.Join(this.Groups, ", "))
 }
 
+func PackageFromApString(pkg string) Package {
+	parts := strings.Split(pkg, ":")
+	if len(parts) == 1 {
+		return Package{Package: parts[0], Groups: []string{"default"}}
+	}
+	return Package{Package: parts[0], Groups: strings.Split(parts[1], ",")}
+}
+
 type ByPackageName []Package
 
 func (a ByPackageName) Len() int           { return len(a) }
