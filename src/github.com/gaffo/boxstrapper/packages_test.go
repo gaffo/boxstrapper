@@ -6,6 +6,12 @@ import (
   	"github.com/stretchr/testify/assert"
 )
 
+func TestPackageToString_SingleGroup(t *testing.T) {
+	assert := assert.New(t)
+	pkg := Package{Package: "hi", Groups: []string{"default"}}
+	assert.Equal("hi: default", pkg.String())
+}
+
 func TestSinglePackage_NoGroups(t *testing.T) {
 	s := "i3"
 

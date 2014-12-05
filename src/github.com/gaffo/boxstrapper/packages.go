@@ -2,11 +2,24 @@ package boxstrapper
 
 import (
 	"strings"
+	// "fmt"
 )
 
 type Package struct {
 	Package string
 	Groups []string
+}
+
+func (this Package) String() string {
+	return "hi: default"
+}
+
+type Packages struct {
+}
+
+func (this *Packages) Add(pkg Package) error {
+
+	return nil
 }
 
 func ParsePackages(contents string) []Package {
