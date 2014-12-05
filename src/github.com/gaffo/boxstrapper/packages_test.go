@@ -223,3 +223,13 @@ boxstrapper: dev, pork
 	assert.Equal("dev", packages[1].Groups[0])
 	assert.Equal("pork", packages[1].Groups[1])
 }
+
+func TestPackages_Print(t *testing.T) {
+	assert := assert.New(t)
+	packages := Packages{}
+	packages.Add(Package{Package: "pkg", Groups: []string{"g1", "g2"}})
+
+	result := packages.String()
+
+	assert.Equal("pkg: g1, g2", result)
+}

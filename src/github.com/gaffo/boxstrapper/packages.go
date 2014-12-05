@@ -17,11 +17,19 @@ func (this Package) String() string {
 }
 
 type Packages struct {
+	Packages []Package
 }
 
-func (this *Packages) Add(pkg Package) error {
+func (this *Packages) Add(pkg Package) {
+	this.Packages = append(this.Packages, pkg)
+}
 
-	return nil
+func (this Packages) String() string {
+	results := make([]string, len(this.Packages))
+	for i, pkg := range(this.Packages) {
+		results[i] = pkg.String()
+	}
+	return strings.Join(results, "\n")
 }
 
 func ParsePackages(contents string) []Package {
