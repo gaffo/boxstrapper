@@ -12,6 +12,12 @@ func TestPackageToString_SingleGroup(t *testing.T) {
 	assert.Equal("hi: default", pkg.String())
 }
 
+func TestPackageToString_TwoGroups(t *testing.T) {
+	assert := assert.New(t)
+	pkg := Package{Package: "hi", Groups: []string{"default", "system"}}
+	assert.Equal("hi: default, system", pkg.String())
+}
+
 func TestSinglePackage_NoGroups(t *testing.T) {
 	s := "i3"
 

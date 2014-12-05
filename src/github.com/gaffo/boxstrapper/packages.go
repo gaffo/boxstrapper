@@ -2,7 +2,7 @@ package boxstrapper
 
 import (
 	"strings"
-	// "fmt"
+	"fmt"
 )
 
 type Package struct {
@@ -11,7 +11,7 @@ type Package struct {
 }
 
 func (this Package) String() string {
-	return "hi: default"
+	return fmt.Sprintf("%s: %s", this.Package, strings.Join(this.Groups, ", "))
 }
 
 type Packages struct {
