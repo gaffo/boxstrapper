@@ -1,5 +1,11 @@
 package boxstrapper
 
-func Ap(driver Driver) {
+import (
+)
 
+func Ap(driver Driver, packages []string) error {
+	for _, pkg := range(packages) {
+		driver.AddPackage(pkg)
+	}
+	return nil
 }

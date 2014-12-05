@@ -3,26 +3,27 @@ package main
 import (
 	"os"
 	"fmt"
-	// "boxstrapper"
+	. "github.com/gaffo/boxstrapper"
 )
 
 func usage() {
-	fmt.Println("bs ap PACKAGES...")
+	fmt.Println("USAGE: bs ap PACKAGES...")
 }
 
-func main() int {
+func main() {
 	 if len(os.Args) < 2 {
 	 	usage()
-	 	return 1
+	 	return
 	 }
 
 	 driver := UbuntuDriver{}
 
 	 switch os.Args[1] {
 	 case "ap":
-	 	return boostrapper.Ap(driver)
+	 	Ap(driver, os.Args[2:])
+	 	return
 	 default:
 	 	usage()
-	 	return 1
+	 	return
 	 }
 }

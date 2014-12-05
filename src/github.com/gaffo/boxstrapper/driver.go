@@ -5,5 +5,5 @@ import (
 )
 
 type Driver interface {
-	AddPackage(packageName string) err
+	AddPackage(packageName string) error
 }

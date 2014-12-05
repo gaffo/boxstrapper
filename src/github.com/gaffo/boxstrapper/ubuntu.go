@@ -1,4 +1,4 @@
-package boxstraper
+package boxstrapper
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 type UbuntuDriver struct {
 }
 
-func (*UbuntuDriver) AddPackage(packageName string) err {
+func (UbuntuDriver) AddPackage(packageName string) error {
 	fmt.Println("Installing Package:", packageName)
 	return nil
 }
