@@ -25,187 +25,201 @@ func TestPackageToString_TwoGroupsAlphabetize(t *testing.T) {
 }
 
 func TestSinglePackage_NoGroups(t *testing.T) {
+	assert := assert.New(t)
 	s := "i3"
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 1, len(packages))
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 1, len(packages[0].Groups))
-	assert.Equal(t, "default", packages[0].Groups[0])
+	assert.Equal(1, len(packages))
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(1, len(packages[0].Groups))
+	assert.Equal("default", packages[0].Groups[0])
 }
 
 func TestSinglePackage_PrefixWhitespace_NoGroups(t *testing.T) {
+	assert := assert.New(t)
 	s := " i3"
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 1, len(packages))
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 1, len(packages[0].Groups))
-	assert.Equal(t, "default", packages[0].Groups[0])
+	assert.Equal(1, len(packages))
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(1, len(packages[0].Groups))
+	assert.Equal("default", packages[0].Groups[0])
 }
 
 func TestSinglePackage_PostfixWhitespace_NoGroups(t *testing.T) {
+	assert := assert.New(t)
 	s := "i3 "
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 1, len(packages))
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 1, len(packages[0].Groups))
-	assert.Equal(t, "default", packages[0].Groups[0])
+	assert.Equal(1, len(packages))
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(1, len(packages[0].Groups))
+	assert.Equal("default", packages[0].Groups[0])
 }
 
 func TestSinglePackageWithLeadingWhitespace(t *testing.T) {
+	assert := assert.New(t)
 	s := "i3:  system"
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 1, len(packages))
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 1, len(packages[0].Groups))
-	assert.Equal(t, "system", packages[0].Groups[0])
+	assert.Equal(1, len(packages))
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(1, len(packages[0].Groups))
+	assert.Equal("system", packages[0].Groups[0])
 }
 
 func TestSinglePackage_PrefixWhitespace_WithGroup(t *testing.T) {
+	assert := assert.New(t)
 	s := " i3: system"
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 1, len(packages))
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 1, len(packages[0].Groups))
-	assert.Equal(t, "system", packages[0].Groups[0])
+	assert.Equal(1, len(packages))
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(1, len(packages[0].Groups))
+	assert.Equal("system", packages[0].Groups[0])
 }
 
 func TestSinglePackage_PostfixWhitespace_WithGroup(t *testing.T) {
+	assert := assert.New(t)
 	s := "i3 : system"
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 1, len(packages))
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 1, len(packages[0].Groups))
-	assert.Equal(t, "system", packages[0].Groups[0])
+	assert.Equal(1, len(packages))
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(1, len(packages[0].Groups))
+	assert.Equal("system", packages[0].Groups[0])
 }
 
 func TestSinglePackageWithTrailingWhitespace(t *testing.T) {
+	assert := assert.New(t)
 	s := "i3: system "
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 1, len(packages))
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 1, len(packages[0].Groups))
-	assert.Equal(t, "system", packages[0].Groups[0])
+	assert.Equal(1, len(packages))
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(1, len(packages[0].Groups))
+	assert.Equal("system", packages[0].Groups[0])
 }
 
 func TestSinglePackage_MultipleGroups(t *testing.T) {
+	assert := assert.New(t)
 	s := "i3: system, boxstrapper"
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 1, len(packages))
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 2, len(packages[0].Groups))
-	assert.Equal(t, "system", packages[0].Groups[0])
-	assert.Equal(t, "boxstrapper", packages[0].Groups[1])
+	assert.Equal(1, len(packages))
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(2, len(packages[0].Groups))
+	assert.Equal("system", packages[0].Groups[0])
+	assert.Equal("boxstrapper", packages[0].Groups[1])
 }
 	
 func TestSinglePackage_MultipleGroups_PrefixWhitespace(t *testing.T) {
+	assert := assert.New(t)
 	s := "i3: system,  boxstrapper"
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 1, len(packages))
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 2, len(packages[0].Groups))
-	assert.Equal(t, "system", packages[0].Groups[0])
-	assert.Equal(t, "boxstrapper", packages[0].Groups[1])
+	assert.Equal(1, len(packages))
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(2, len(packages[0].Groups))
+	assert.Equal("system", packages[0].Groups[0])
+	assert.Equal("boxstrapper", packages[0].Groups[1])
 }
 	
 func TestSinglePackage_MultipleGroups_PostfixWhitespace(t *testing.T) {
+	assert := assert.New(t)
 	s := "i3: system, boxstrapper "
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 1, len(packages))
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 2, len(packages[0].Groups))
-	assert.Equal(t, "system", packages[0].Groups[0])
-	assert.Equal(t, "boxstrapper", packages[0].Groups[1])
+	assert.Equal(1, len(packages))
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(2, len(packages[0].Groups))
+	assert.Equal("system", packages[0].Groups[0])
+	assert.Equal("boxstrapper", packages[0].Groups[1])
 }
 
 func TestMultiplePackages_DefaultGroups(t *testing.T) {
+	assert := assert.New(t)
 	s := `i3
 boxstrapper`
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 2, len(packages))
+	assert.Equal(2, len(packages))
 
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 1, len(packages[0].Groups))
-	assert.Equal(t, "default", packages[0].Groups[0])
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(1, len(packages[0].Groups))
+	assert.Equal("default", packages[0].Groups[0])
 
-	assert.Equal(t, "boxstrapper", packages[1].Package)
-	assert.Equal(t, 1, len(packages[1].Groups))
-	assert.Equal(t, "default", packages[1].Groups[0])
+	assert.Equal("boxstrapper", packages[1].Package)
+	assert.Equal(1, len(packages[1].Groups))
+	assert.Equal("default", packages[1].Groups[0])
 }
 
 func TestMultiplePackages_SingleGroups(t *testing.T) {
+	assert := assert.New(t)
 	s := `i3: system
 boxstrapper: dev`
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 2, len(packages))
+	assert.Equal(2, len(packages))
 
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 1, len(packages[0].Groups))
-	assert.Equal(t, "system", packages[0].Groups[0])
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(1, len(packages[0].Groups))
+	assert.Equal("system", packages[0].Groups[0])
 
-	assert.Equal(t, "boxstrapper", packages[1].Package)
-	assert.Equal(t, 1, len(packages[1].Groups))
-	assert.Equal(t, "dev", packages[1].Groups[0])
+	assert.Equal("boxstrapper", packages[1].Package)
+	assert.Equal(1, len(packages[1].Groups))
+	assert.Equal("dev", packages[1].Groups[0])
 }
 
 func TestMultiplePackages_MultipleGroups(t *testing.T) {
+	assert := assert.New(t)
 	s := `i3: system, long
 boxstrapper: dev, pork`
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 2, len(packages))
+	assert.Equal(2, len(packages))
 
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 2, len(packages[0].Groups))
-	assert.Equal(t, "system", packages[0].Groups[0])
-	assert.Equal(t, "long", packages[0].Groups[1])
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(2, len(packages[0].Groups))
+	assert.Equal("system", packages[0].Groups[0])
+	assert.Equal("long", packages[0].Groups[1])
 
-	assert.Equal(t, "boxstrapper", packages[1].Package)
-	assert.Equal(t, 2, len(packages[1].Groups))
-	assert.Equal(t, "dev", packages[1].Groups[0])
-	assert.Equal(t, "pork", packages[1].Groups[1])
+	assert.Equal("boxstrapper", packages[1].Package)
+	assert.Equal(2, len(packages[1].Groups))
+	assert.Equal("dev", packages[1].Groups[0])
+	assert.Equal("pork", packages[1].Groups[1])
 }
 
 func TestMultiplePackages_EmptyThirdPackage(t *testing.T) {
+	assert := assert.New(t)
 	s := `i3: system, long
 boxstrapper: dev, pork
 `
 
 	packages := ParsePackages(s)
 
-	assert.Equal(t, 2, len(packages))
+	assert.Equal(2, len(packages))
 
-	assert.Equal(t, "i3", packages[0].Package)
-	assert.Equal(t, 2, len(packages[0].Groups))
-	assert.Equal(t, "system", packages[0].Groups[0])
-	assert.Equal(t, "long", packages[0].Groups[1])
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(2, len(packages[0].Groups))
+	assert.Equal("system", packages[0].Groups[0])
+	assert.Equal("long", packages[0].Groups[1])
 
-	assert.Equal(t, "boxstrapper", packages[1].Package)
-	assert.Equal(t, 2, len(packages[1].Groups))
-	assert.Equal(t, "dev", packages[1].Groups[0])
-	assert.Equal(t, "pork", packages[1].Groups[1])
+	assert.Equal("boxstrapper", packages[1].Package)
+	assert.Equal(2, len(packages[1].Groups))
+	assert.Equal("dev", packages[1].Groups[0])
+	assert.Equal("pork", packages[1].Groups[1])
 }
