@@ -2,6 +2,8 @@ package boxstrapper
 
 import (
 	"sort"
+	"fmt"
+	"strings"
 )
 
 func Ap(driver Driver, storage Storage, packages []string) error {
@@ -38,7 +40,7 @@ func Ap(driver Driver, storage Storage, packages []string) error {
 		}
 		sRet += pkg.String()
 	}
-	storage.WritePackages(sRet)
+	storage.WritePackages(sRet, fmt.Sprintf("ap %s", strings.Join(packages, ", ")))
 	
 	return nil
 }

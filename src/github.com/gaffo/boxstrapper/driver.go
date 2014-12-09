@@ -10,5 +10,5 @@ type Driver interface {
 
 type Storage interface {
 	ReadPackages() (string, error)
-	WritePackages(contents string) error
+	WritePackages(contents, reason string) error
 }

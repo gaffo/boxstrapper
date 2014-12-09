@@ -14,7 +14,7 @@ func (m *Storage) ReadPackages() (string, error) {
 
 	return r0, r1
 }
-func (m *Storage) WritePackages(contents string) error {
+func (m *Storage) WritePackages(contents, reason string) error {
 	ret := m.Called(contents)
 
 	r0 := ret.Error(0)
