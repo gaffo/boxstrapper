@@ -16,8 +16,30 @@ func boxstrap_dir() string {
 	return fmt.Sprintf("%s/boxstrap.d", os.Getenv("HOME"))
 }
 
+func boxstrap_join(path string) string {
+	return fmt.Sprintf("%s/%s", boxstrap_dir(), path)
+}
+
 func packages_file() string {
-	return fmt.Sprintf("%s/packages.bss", boxstrap_dir())
+	return boxstrap_join("packages.bss")
+}
+
+func ensure_repo() error {
+	if _, err := os.Stat(boxstrap_dir()); err != nil {
+		err = os.Mkdir(boxstrap_dir(), os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+	if _, err := os.Stat(boxstrap_join(".git")); err != nil {
+		cmd := exec.Command("git", "init")
+		cmd.Dir = boxstrap_dir()
+		err = cmd.Run()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (FilesystemStorage) ReadPackages() (string, error) {
@@ -31,7 +53,12 @@ func (FilesystemStorage) ReadPackages() (string, error) {
 }
 
 func (FilesystemStorage) WritePackages(contents string, reason string) error {
-	err := ioutil.WriteFile(
+	err := ensure_repo()
+	if err != nil {
+		return err
+	}
+
+	err = ioutil.WriteFile(
 		packages_file(), 
 		[]byte(contents), 
 		os.ModePerm)
