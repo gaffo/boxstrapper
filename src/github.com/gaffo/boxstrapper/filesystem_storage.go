@@ -4,11 +4,21 @@ import (
 	"io/ioutil"
 	"os"
 	"fmt"
-	"os/exec"
-	"strings"
+	"github.com/libgit2/git2go"
 )
 
 type FilesystemStorage struct {
+	BaseDir string
+}
+
+func NewFilesystemStorage(basedir string) (*FilesystemStorage) {
+	storage := new(FilesystemStorage)
+	if basedir == "" {
+		storage.BaseDir = boxstrap_dir()
+	} else {
+		storage.BaseDir = basedir
+	}
+	return storage
 }
 
 func boxstrap_dir() string {
@@ -16,34 +26,33 @@ func boxstrap_dir() string {
 	return fmt.Sprintf("%s/boxstrap.d", os.Getenv("HOME"))
 }
 
-func boxstrap_join(path string) string {
-	return fmt.Sprintf("%s/%s", boxstrap_dir(), path)
+func (this *FilesystemStorage) path(path string) string {
+	return fmt.Sprintf("%s/%s", this.BaseDir, path)
 }
 
-func packages_file() string {
-	return boxstrap_join("packages.bss")
+func (this *FilesystemStorage) packagesFile() string {
+	return this.path("packages.bss")
 }
 
-func ensure_repo() error {
-	if _, err := os.Stat(boxstrap_dir()); err != nil {
-		err = os.Mkdir(boxstrap_dir(), os.ModePerm)
+func (this *FilesystemStorage) ensureRepo() (* git.Repository, error) {
+	if _, err := os.Stat(this.BaseDir); err != nil {
+		err = os.Mkdir(this.BaseDir, os.ModePerm)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
-	if _, err := os.Stat(boxstrap_join(".git")); err != nil {
-		cmd := exec.Command("git", "init")
-		cmd.Dir = boxstrap_dir()
-		err = cmd.Run()
+	if _, err := os.Stat(this.path(".git")); err != nil {
+		repo, err := git.InitRepository(this.BaseDir, false)
 		if err != nil {
-			return err
+			return nil,err
 		}
+		return repo, nil
 	}
-	return nil
+	return git.OpenRepository(this.BaseDir)
 }
 
-func (FilesystemStorage) ReadPackages() (string, error) {
-	bytes, err := ioutil.ReadFile(packages_file())
+func (this *FilesystemStorage) ReadPackages() (string, error) {
+	bytes, err := ioutil.ReadFile(this.packagesFile())
 
 	if err != nil {
 		return "", err
@@ -52,14 +61,22 @@ func (FilesystemStorage) ReadPackages() (string, error) {
 	return string(bytes), err
 }
 
-func (FilesystemStorage) WritePackages(contents string, reason string) error {
-	err := ensure_repo()
+func config_str(repo *git.Repository, key string) (string, error) {
+	config, err := repo.Config()
+	if err != nil {
+		return "", err
+	}
+	return config.LookupString(key)
+}
+
+func (this *FilesystemStorage) WritePackages(contents string, reason string) error {
+	repo, err := this.ensureRepo()
 	if err != nil {
 		return err
 	}
 
 	err = ioutil.WriteFile(
-		packages_file(), 
+		this.packagesFile(), 
 		[]byte(contents), 
 		os.ModePerm)
 
@@ -67,21 +84,15 @@ func (FilesystemStorage) WritePackages(contents string, reason string) error {
 		return err
 	}
 
-	cmd := exec.Command("git", "add", "packages.bss")
-	cmd.Dir = boxstrap_dir()
-	err = cmd.Run()
+	idx, err := repo.Index()
 	if err != nil {
-		fmt.Println("Add Err>", err)
 		return err
 	}
-	reason = strings.Replace(reason, `"`, `'`, 0)
-	reason = fmt.Sprintf(`"%s"`, reason)
-	cmd = exec.Command("git", "commit", "-m", reason)
-	cmd.Dir = boxstrap_dir()
-	err = cmd.Run()
-	if err != nil {
-		fmt.Println("Commit Err>", err)
-		return err
-	}
+	idx.AddByPath("packages.bss")
+	name, _ := config_str(repo, "user.name")
+	email, _ := config_str(repo, "user.email")
+	fmt.Println("user:", name)
+	fmt.Println("email:", email)
+
 	return nil
 }

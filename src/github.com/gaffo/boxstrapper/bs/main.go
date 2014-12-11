@@ -17,7 +17,7 @@ func main() {
 	 }
 
 	 driver := UbuntuDriver{}
-	 storage := FilesystemStorage{}
+	 storage := NewFilesystemStorage("")
 
 	 switch os.Args[1] {
 	 case "ap":
