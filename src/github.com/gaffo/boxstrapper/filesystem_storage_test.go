@@ -7,7 +7,6 @@ import (
   	"io/ioutil"
   	"os"
 	"github.com/libgit2/git2go"
-	"log"
 )
 
 func cT() {
@@ -29,22 +28,41 @@ func fileContents(file string) string {
 	return string(bytes)
 }
 
-func walkRepo(base string, fun git.RevWalkIterator) {
-	log.Print("Walking")
+func statusNone(base string) bool {
 	repo, err := git.OpenRepository(base)
 	if err != nil {
-		log.Print("Open", err)
+		return false
+	}
+	defer repo.Free()
+
+	opts := &git.StatusOptions{}
+	statusList, err := repo.StatusList(opts)
+
+	if err != nil {
+		return false
+	}
+
+	entryCount, err := statusList.EntryCount()
+	if err != nil {
+		return false
+	}
+
+	return entryCount == 0
+}
+
+func walkRepo(base string, fun git.RevWalkIterator) {
+	repo, err := git.OpenRepository(base)
+	if err != nil {
 		return
 	}
+	defer repo.Free()
 	walk, err := repo.Walk()
 	if err != nil {
-		log.Print("Walk ", err)
 		return
 	}
 
 	err = walk.PushRange("HEAD..HEAD")
 	if err != nil {
-		log.Print("PushRange ", err)
 		return
 	}
 
@@ -54,7 +72,6 @@ func walkRepo(base string, fun git.RevWalkIterator) {
 func listCommitMessages(base string) []string {
 	commits := make([]string, 0, 32)
 	walkRepo(base, func (commit *git.Commit) bool {
-		log.Print("Iterate Message")
 		commits = append(commits, commit.Message())
 		return true
 	})
@@ -64,10 +81,8 @@ func listCommitMessages(base string) []string {
 func listCommitFiles(base string) [][]string {
 	files := make([][]string, 0, 32)
 	walkRepo(base, func (commit *git.Commit) bool {
-		log.Print("Iterate File")
 		tree, err := commit.Tree()
 		if err != nil {
-			log.Print("commit.Tree ", err)
 			return true
 		}
 		fileList := make([]string, 0, 32)
@@ -114,7 +129,23 @@ func TestWritePackages_NoRepo(t *testing.T) {
 
 	assert.True(fileExists("tmp"))
 	assert.True(fileExists("tmp/packages.bss"))
+	assert.True(statusNone("tmp"))
 	assert.Equal("packages", fileContents("tmp/packages.bss"))
 	assert.Equal([]string{"reason"}, listCommitMessages("tmp"))
 	assert.Equal([][]string{{"packages.bss"}}, listCommitFiles("tmp"))
 }
+
+// func TestWritePackages_MultiplePackages(t *testing.T) {
+// 	assert := assert.New(t)
+// 	defer cT()
+
+// 	storage := NewFilesystemStorage("tmp")
+// 	assert.Nil(storage.WritePackages("packages", "reason"))
+// 	assert.Nil(storage.WritePackages("packages packages", "reason2"))
+
+// 	assert.True(fileExists("tmp"))
+// 	assert.True(fileExists("tmp/packages.bss"))
+// 	assert.Equal("packages packages", fileContents("tmp/packages.bss"))
+// 	assert.Equal([]string{"reason", "reason2"}, listCommitMessages("tmp"))
+// 	assert.Equal([][]string{{"packages.bss"}, {"packages.bss"}}, listCommitFiles("tmp"))
+// }

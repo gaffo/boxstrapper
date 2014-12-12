@@ -77,10 +77,7 @@ func (this *FilesystemStorage) WritePackages(contents string, reason string) err
 		fmt.Println("ensureRepo", err)
 		return err
 	}
-	defer func() {
-		log.Print("Closing Repo")
-		repo.Free()
-	}()
+	defer repo.Free()
 
 	err = ioutil.WriteFile(
 		this.packagesFile(), 
@@ -127,6 +124,7 @@ func (this *FilesystemStorage) WritePackages(contents string, reason string) err
 
 	commit, err := repo.CreateCommit("HEAD", sig, sig, reason, tree)
 	log.Printf("%s now at revision %s\n", this.BaseDir, commit)
+	idx.Write()
 
 	return err
 }
