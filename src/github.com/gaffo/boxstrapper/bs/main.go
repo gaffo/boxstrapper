@@ -20,9 +20,16 @@ ap:
     your package manager and then commit to ~/boxstrap.d an updated packages.bss
     file. This file can be later used on a new machine to recover all your installs.
 
+    examples:
+    	bs ap vim
+    	bs ap emacs:dev blender:games gimp:games,default
+
 recover:
 	Rebuilds the machine to the best of it's ability using info in ~/boxstrap.d.
 	Currently you will need to pull the repo yourself.
+
+	example:
+		bs recover
 
 MORE INFO:
 	Can be found at http://github.com/gaffo/boxstrapper`)
