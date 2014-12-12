@@ -1,0 +1,5 @@
+vim: default
+emacs: default, game
+blender: game -> emacs, vim
+oh-my-zsh: default
+file(~/.oh-my-zsh/plugins/gopath/gopath.plugin.zsh): default -> oh-my-zsh
