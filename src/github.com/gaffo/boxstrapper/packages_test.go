@@ -189,6 +189,24 @@ boxstrapper: dev`
 	assert.Equal("dev", packages[1].Groups[0])
 }
 
+func TestMultiplePackages_WithFiles_SingleGroups(t *testing.T) {
+	assert := assert.New(t)
+	s := `i3: system
+file(~/.oh-my-zsh/plugins/gopath/gopath.plugin.zsh): dev`
+
+	packages := ParsePackages(s)
+
+	assert.Equal(2, len(packages))
+
+	assert.Equal("i3", packages[0].Package)
+	assert.Equal(1, len(packages[0].Groups))
+	assert.Equal("system", packages[0].Groups[0])
+
+	assert.Equal("file(~/.oh-my-zsh/plugins/gopath/gopath.plugin.zsh)", packages[1].Package)
+	assert.Equal(1, len(packages[1].Groups))
+	assert.Equal("dev", packages[1].Groups[0])
+}
+
 func TestMultiplePackages_MultipleGroups(t *testing.T) {
 	assert := assert.New(t)
 	s := `i3: system, long
