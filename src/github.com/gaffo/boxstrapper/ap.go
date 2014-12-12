@@ -6,6 +6,14 @@ import (
 	"strings"
 )
 
+func PackageFromApString(pkg string) Package {
+	parts := strings.Split(pkg, ":")
+	if len(parts) == 1 {
+		return Package{Package: parts[0], Groups: []string{"default"}}
+	}
+	return Package{Package: parts[0], Groups: strings.Split(parts[1], ",")}
+}
+
 func Ap(driver Driver, storage Storage, packages []string) error {
 	// Load prevoius packages
 	strPrexist, _ := storage.ReadPackages()
