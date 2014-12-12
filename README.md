@@ -20,9 +20,9 @@ This new version aims to be:
 
 Completely Self Contained
 -----------
-This new verison is written in go and will have no dependencies that aren't on a base system. Anything that is required, like git (libgit2) will be statically linked into the executable and distributed that way.
+This new verison is written in go and will have no dependencies that aren't on a stock system. Anything that is required, like git (libgit2) will be statically linked into the executable and distributed that way.
 
-In this way we aim to have a very minimal and quick bootstrap setp to get you up and going.:
+In this way we aim to have a very minimal and quick bootstrap setp to get you up and going:
 
 * Download bs executable
 * Optionally recover from a previous configuration
@@ -39,6 +39,7 @@ As Seamless as Possible
 -----------
 * Replace common system commands like apt-get / yum with simple boxstrap equivalents.
 * Possibly eventually shim out these command completely so you don't even have to think about using boxstrap
+* These command record into the ~/boxstrap.d directory in simple configuration.
 * Make these commands even easier than the native ones (think adding a ppa which is 3 steps)
 
 Desktop/Laptop Centric (as opposed to Server Centric)
