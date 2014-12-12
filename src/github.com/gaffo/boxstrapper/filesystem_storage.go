@@ -44,6 +44,7 @@ func (this *FilesystemStorage) ensureRepo() (* git.Repository, error) {
 		}
 	}
 	if _, err := os.Stat(this.path(".git")); err != nil {
+		fmt.Printf("Creating repository at %s\n", this.BaseDir)
 		repo, err := git.InitRepository(this.BaseDir, false)
 		if err != nil {
 			return nil,err
@@ -122,9 +123,28 @@ func (this *FilesystemStorage) WritePackages(contents string, reason string) err
 		When: time.Now(),
 	}
 
-	commit, err := repo.CreateCommit("HEAD", sig, sig, reason, tree)
-	log.Printf("%s now at revision %s\n", this.BaseDir, commit)
-	idx.Write()
+	currentBranch, _ := repo.Head()
 
-	return err
+	// we're on a new repo if there is no branch
+
+	if currentBranch == nil {
+		commit, _ := repo.CreateCommit("HEAD", sig, sig, reason, tree)
+		log.Printf("%s now at revision %s\n", this.BaseDir, commit)
+		idx.Write()
+		return nil
+	}
+
+	// We're on a repo with some commits 
+
+	currentTip, _ := repo.LookupCommit(currentBranch.Target())
+	if err != nil {
+		fmt.Println("LookupCommit", err)
+		return err
+	}
+
+	commit, _ := repo.CreateCommit("HEAD", sig, sig, reason, tree, currentTip)
+	log.Printf("%s now at revision %s\n", this.BaseDir, commit)
+	idx.Write()	
+
+	return nil
 }

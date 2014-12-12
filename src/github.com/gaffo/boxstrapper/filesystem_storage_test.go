@@ -135,17 +135,18 @@ func TestWritePackages_NoRepo(t *testing.T) {
 	assert.Equal([][]string{{"packages.bss"}}, listCommitFiles("tmp"))
 }
 
-// func TestWritePackages_MultiplePackages(t *testing.T) {
-// 	assert := assert.New(t)
-// 	defer cT()
+func TestWritePackages_MultiplePackages(t *testing.T) {
+	assert := assert.New(t)
+	defer cT()
 
-// 	storage := NewFilesystemStorage("tmp")
-// 	assert.Nil(storage.WritePackages("packages", "reason"))
-// 	assert.Nil(storage.WritePackages("packages packages", "reason2"))
+	storage := NewFilesystemStorage("tmp")
+	assert.Nil(storage.WritePackages("packages", "reason"))
+	assert.Nil(storage.WritePackages("packages packages", "reason2"))
 
-// 	assert.True(fileExists("tmp"))
-// 	assert.True(fileExists("tmp/packages.bss"))
-// 	assert.Equal("packages packages", fileContents("tmp/packages.bss"))
-// 	assert.Equal([]string{"reason", "reason2"}, listCommitMessages("tmp"))
-// 	assert.Equal([][]string{{"packages.bss"}, {"packages.bss"}}, listCommitFiles("tmp"))
-// }
+	assert.True(fileExists("tmp"))
+	assert.True(fileExists("tmp/packages.bss"))
+	assert.True(statusNone("tmp"))
+	assert.Equal("packages packages", fileContents("tmp/packages.bss"))
+	assert.Equal([]string{"reason2", "reason"}, listCommitMessages("tmp"))
+	assert.Equal([][]string{{"packages.bss"}, {"packages.bss"}}, listCommitFiles("tmp"))
+}
