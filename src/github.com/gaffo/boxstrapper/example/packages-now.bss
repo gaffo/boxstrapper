@@ -1,3 +1,3 @@
 vim: default
 emacs: default, game
-file(~/.oh-my-zsh/plugins/gopath/gopath.plugin.zsh): default
+watch(~/.oh-my-zsh/plugins/gopath/gopath.plugin.zsh): default
