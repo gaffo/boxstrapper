@@ -5,6 +5,8 @@ import (
 	"os"
 	"fmt"
 	"github.com/libgit2/git2go"
+	"time"
+	"log"
 )
 
 type FilesystemStorage struct {
@@ -72,27 +74,59 @@ func config_str(repo *git.Repository, key string) (string, error) {
 func (this *FilesystemStorage) WritePackages(contents string, reason string) error {
 	repo, err := this.ensureRepo()
 	if err != nil {
+		fmt.Println("ensureRepo", err)
 		return err
 	}
+	defer func() {
+		log.Print("Closing Repo")
+		repo.Free()
+	}()
 
 	err = ioutil.WriteFile(
 		this.packagesFile(), 
 		[]byte(contents), 
-		os.ModePerm)
+		0666)
 
 	if err != nil {
+		fmt.Println("WriteFile", err)
 		return err
 	}
 
 	idx, err := repo.Index()
 	if err != nil {
+		fmt.Println("Index", err)
 		return err
 	}
-	idx.AddByPath("packages.bss")
+
 	name, _ := config_str(repo, "user.name")
 	email, _ := config_str(repo, "user.email")
-	fmt.Println("user:", name)
-	fmt.Println("email:", email)
 
-	return nil
+	err = idx.AddByPath("packages.bss")
+	if err != nil {
+		fmt.Println("AddByPath", err)
+		return err
+	}
+
+	treeId, err := idx.WriteTree()
+	if err != nil {
+		fmt.Println("WriteTree", err)
+		return err
+	}
+
+	tree, err := repo.LookupTree(treeId)
+	if err != nil {
+		fmt.Println("LookupTree", err)
+		return err
+	}
+
+	sig := &git.Signature{
+		Name: name,
+		Email: email,
+		When: time.Now(),
+	}
+
+	commit, err := repo.CreateCommit("HEAD", sig, sig, reason, tree)
+	log.Printf("%s now at revision %s\n", this.BaseDir, commit)
+
+	return err
 }
