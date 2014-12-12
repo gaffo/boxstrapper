@@ -91,7 +91,7 @@ Dunno, this needs thought, as you can tell by me saying Dunno.
 
 Extensibility
 -----------
-For now golang isn't going to allow extension. It's all packaged. All ofthe extension mechansims I've seen in other config management systems are way over complicated and super flexible. But they're also hard to learn. I don't want that. I want super simple. I have a few ideas in order of preference:
+For now boxstrap isn't going to allow extension. It's all packaged. All ofthe extension mechansims I've seen in other config management systems are way over complicated and super flexible. But they're also hard to learn. I don't want that. I want super simple. I have a few ideas in order of preference:
 
 * Give back, you can extend boxstrap and submit back
 * Compilable go scripts with a simple framework. You toss plugins in a dir, they get compiled as sub commands, and they get added to the system. This keeps us on one language. Not that it's a language everyone knows.
