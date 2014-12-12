@@ -96,3 +96,7 @@ For now boxstrap isn't going to allow extension. It's all packaged. All ofthe ex
 * Give back, you can extend boxstrap and submit back
 * Compilable go scripts with a simple framework. You toss plugins in a dir, they get compiled as sub commands, and they get added to the system. This keeps us on one language. Not that it's a language everyone knows.
 * Embedded scripting language: Looks like ruby && javascript are embeddable in golang. Providing a simple minimal plugin layer might be good, but it makes boxstrap into a 2 headed beast (well 3 if you count native). The only libraries allowed to these languages would be provided through golang.
+
+Developing
+============
+Rule #1, Boxstrap is completely TDD. You want to add to it, you have to do this. Look at the history from the beginning. Othern than the ubntu and simple early filesystem drivers (which later got tested as it grew past a single file wrapper), the entire app is driven out with each commit being a test / feature pair. I'm continuing this. If you want to add to boxstrap, you'll do so too.
