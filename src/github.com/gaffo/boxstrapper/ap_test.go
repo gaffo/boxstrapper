@@ -177,3 +177,31 @@ func TestAp_PreExistingPackage_NewGroup_MergesGroups(t *testing.T) {
 	driver.Mock.AssertExpectations(t)
 	storage.Mock.AssertExpectations(t)
 }
+
+func TestPackageFromApString_NoGroup(t *testing.T) {
+	assert := assert.New(t)
+
+	pkg := PackageFromApString("package")
+	assert.Equal("package", pkg.Package)
+	assert.Equal(1, len(pkg.Groups))
+	assert.Equal("default", pkg.Groups[0])
+}
+
+func TestPackageFromApString_SingleGroup(t *testing.T) {
+	assert := assert.New(t)
+
+	pkg := PackageFromApString("package:system")
+	assert.Equal("package", pkg.Package)
+	assert.Equal(1, len(pkg.Groups))
+	assert.Equal("system", pkg.Groups[0])
+}
+
+func TestPackageFromApString_MultipleGroup(t *testing.T) {
+	assert := assert.New(t)
+
+	pkg := PackageFromApString("package:system,george")
+	assert.Equal("package", pkg.Package)
+	assert.Equal(2, len(pkg.Groups))
+	assert.Equal("system", pkg.Groups[0])
+	assert.Equal("george", pkg.Groups[1])
+}
