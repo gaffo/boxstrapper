@@ -28,7 +28,7 @@ func (UbuntuDriver) AddPackage(packageName string) error {
 	}
 	fmt.Println(">", string(str))
 	if err := cmd.Wait(); err != nil {
-		fmt.Println("ERR FROM WAIT>", err)
+		fmt.Println("Error Installing Package", err)
 		return err
 	}
 	return nil
