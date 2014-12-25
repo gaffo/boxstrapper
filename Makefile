@@ -11,7 +11,7 @@ all: $(lg2static)
 	go generate
 	go fmt
 	go test github.com/gaffo/boxstrapper
-	# go build bs
+	go install github.com/gaffo/boxstrapper
 
 $(lg2static): $(lg2dir)
 	@echo lg2static
