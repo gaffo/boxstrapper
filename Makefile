@@ -10,7 +10,7 @@ all: $(lg2static) $(testdeps)
 	cd $(bsdir)
 	go generate
 	go fmt
-	go test github.com/gaffo/boxstrapper
+	go test github.com/gaffo/boxstrapper/...
 	go install github.com/gaffo/boxstrapper
 
 $(testdeps):

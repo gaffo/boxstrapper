@@ -26,7 +26,7 @@ func TestRecoverSinglePackage(t *testing.T) {
 	driver.On("AddPackage", "package").Return(nil).Once()
 
 	storage := new(mocks.Storage)
-	storage.On("ReadPackages").Return("package: default", nil)
+	storage.On("ReadPackages").Return("package(package): default", nil)
 
 	err := Recover(driver, storage)
 	assert.Nil(err)
@@ -42,8 +42,8 @@ func TestRecoverMultiplePackages(t *testing.T) {
 	driver.On("AddPackage", "package2").Return(nil).Once()
 
 	storage := new(mocks.Storage)
-	storage.On("ReadPackages").Return(`package: default
-package2: dev`, nil)
+	storage.On("ReadPackages").Return(`package(package): default
+package(package2): dev`, nil)
 
 	err := Recover(driver, storage)
 	assert.Nil(err)

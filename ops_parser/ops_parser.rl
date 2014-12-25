@@ -99,9 +99,8 @@ import (
   #groups are list of comma seperated group-s
   groups = (group ',' ' '?)* group;
 
-
   operationName = (alnum $char)+ %op;
-  operationDecl = operationName params ':' ' '?;
+  operationDecl = ' '{0,} operationName params ':' ' '{0,};
 
   depParam = p+ %depParam;
   depParams = '(' (depParam ',' ' '?)* depParam ')';

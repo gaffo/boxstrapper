@@ -2,9 +2,15 @@ package boxstrapper
 
 import (
 	"fmt"
+	"github.com/gaffo/boxstrapper/ops_parser"
 	"sort"
 	"strings"
 )
+
+// tell go generate that we want to run  the command below.
+//go:generate ragel -Z -G2 -o ops_parser/ops_parser.go ops_parser/ops_parser.rl
+//go:generate ragel -Vp ops_parser/ops_parser.rl -o ops_parser/ops_parser.dot
+//go:generate dot ops_parser/ops_parser.dot -Tpng -o ops_parser/ops_parser.png
 
 type Package struct {
 	Package string
@@ -26,7 +32,7 @@ func removeDuplicates(a []string) []string {
 func (this Package) String() string {
 	this.Groups = removeDuplicates(this.Groups)
 	sort.Strings(this.Groups)
-	return fmt.Sprintf("%s: %s", this.Package, strings.Join(this.Groups, ", "))
+	return fmt.Sprintf("package(%s): %s", this.Package, strings.Join(this.Groups, ", "))
 }
 
 func PackageFromApString(pkg string) Package {
@@ -60,29 +66,15 @@ func (this Packages) String() string {
 }
 
 func ParsePackages(contents string) []Package {
-	lines := strings.Split(contents, "\n")
+	ops, _ := ops_parser.ParseOps(contents)
 
-	packages := make([]Package, 0, len(lines))
+	packages := make([]Package, 0, len(ops))
 
-	for _, line := range lines {
-		if line == "" {
-			continue
-		}
-
-		if !strings.Contains(line, ": ") {
-			line = strings.TrimSpace(line)
-			packages = append(packages, Package{Package: line, Groups: []string{"default"}})
-			continue
-		}
-
-		parts := strings.SplitN(line, ": ", 2)
-		pkg := parts[0]
-		pkg = strings.TrimSpace(pkg)
-		groups := strings.Split(parts[1], ",")
-		for i, group := range groups {
-			groups[i] = strings.TrimSpace(group)
-		}
-		packages = append(packages, Package{Package: pkg, Groups: groups})
+	for _, op := range ops {
+		packages = append(packages,
+			Package{
+				Package: op.Params[0],
+				Groups:  op.Groups})
 	}
 	return packages
 }

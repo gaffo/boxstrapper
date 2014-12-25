@@ -1,10 +1,5 @@
 package ops_parser_test
 
-// tell go generate that we want to run  the command below.
-//go:generate ragel -Z -G2 -o ops_parser.go ops_parser.rl
-//go:generate ragel -Vp ops_parser.rl -o ops_parser.dot
-//go:generate dot ops_parser.dot -Tpng -o ops_parser.png
-
 import (
 	"fmt"
 	. "github.com/gaffo/boxstrapper/ops_parser"
@@ -89,6 +84,13 @@ func Test_SinglePackage_SingleGroup(t *testing.T) {
 func Test_SinglePackageNoSpace_SingleGroup(t *testing.T) {
 	helper(
 		"package(bar):baz",
+		[]Op{Op{Name: "package", Params: []string{"bar"}, Groups: []string{"baz"}}},
+		t)
+}
+
+func Test_SinglePackageExtraSpace_SingleGroup(t *testing.T) {
+	helper(
+		"package(bar):  baz",
 		[]Op{Op{Name: "package", Params: []string{"bar"}, Groups: []string{"baz"}}},
 		t)
 }
