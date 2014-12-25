@@ -1,27 +1,27 @@
 package boxstrapper
 
 import (
-	"strings"
 	"fmt"
 	"sort"
+	"strings"
 )
 
 type Package struct {
 	Package string
-	Groups []string
+	Groups  []string
 }
 
 func removeDuplicates(a []string) []string {
-    result := []string{}
-    seen := map[string]string{}
-    for _, val := range a {
-            if _, ok := seen[val]; !ok {
-                    result = append(result, val)
-                    seen[val] = val
-            }
-    }
-    return result
-} 
+	result := []string{}
+	seen := map[string]string{}
+	for _, val := range a {
+		if _, ok := seen[val]; !ok {
+			result = append(result, val)
+			seen[val] = val
+		}
+	}
+	return result
+}
 
 func (this Package) String() string {
 	this.Groups = removeDuplicates(this.Groups)
@@ -53,7 +53,7 @@ func (this *Packages) Add(pkg Package) {
 
 func (this Packages) String() string {
 	results := make([]string, len(this.Packages))
-	for i, pkg := range(this.Packages) {
+	for i, pkg := range this.Packages {
 		results[i] = pkg.String()
 	}
 	return strings.Join(results, "\n")
@@ -64,7 +64,7 @@ func ParsePackages(contents string) []Package {
 
 	packages := make([]Package, 0, len(lines))
 
-	for _, line := range(lines) {
+	for _, line := range lines {
 		if line == "" {
 			continue
 		}
@@ -79,7 +79,7 @@ func ParsePackages(contents string) []Package {
 		pkg := parts[0]
 		pkg = strings.TrimSpace(pkg)
 		groups := strings.Split(parts[1], ",")
-		for i, group := range(groups) {
+		for i, group := range groups {
 			groups[i] = strings.TrimSpace(group)
 		}
 		packages = append(packages, Package{Package: pkg, Groups: groups})

@@ -1,8 +1,8 @@
 package boxstrapper
 
 import (
-	"sort"
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -11,12 +11,12 @@ func Ap(driver Driver, storage Storage, packages []string) error {
 	strPrexist, _ := storage.ReadPackages()
 	mpPkgnamePkg := make(map[string]Package)
 	aPackages := ParsePackages(strPrexist)
-	for _, pkg := range(aPackages) {
+	for _, pkg := range aPackages {
 		mpPkgnamePkg[pkg.Package] = pkg
 	}
 
 	// Install Packages
-	for _, pkgStr := range(packages) {
+	for _, pkgStr := range packages {
 		pkg := PackageFromApString(pkgStr)
 		driver.AddPackage(pkg.Package)
 		if oldPkg, ok := mpPkgnamePkg[pkg.Package]; ok {
@@ -27,7 +27,7 @@ func Ap(driver Driver, storage Storage, packages []string) error {
 
 	// sort the packages
 	aPackages = make([]Package, 0, len(mpPkgnamePkg))
-	for _, pkg := range(mpPkgnamePkg) {
+	for _, pkg := range mpPkgnamePkg {
 		aPackages = append(aPackages, pkg)
 	}
 	sort.Sort(ByPackageName(aPackages))
@@ -41,6 +41,6 @@ func Ap(driver Driver, storage Storage, packages []string) error {
 		sRet += pkg.String()
 	}
 	storage.WritePackages(sRet, fmt.Sprintf("ap %s", strings.Join(packages, ", ")))
-	
+
 	return nil
 }

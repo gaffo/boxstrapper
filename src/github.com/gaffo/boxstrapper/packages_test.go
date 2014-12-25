@@ -1,9 +1,9 @@
 package boxstrapper_test
 
 import (
-	"testing"
 	. "github.com/gaffo/boxstrapper"
-  	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestPackageToString_SingleGroup(t *testing.T) {
@@ -126,7 +126,7 @@ func TestSinglePackage_MultipleGroups(t *testing.T) {
 	assert.Equal("system", packages[0].Groups[0])
 	assert.Equal("boxstrapper", packages[0].Groups[1])
 }
-	
+
 func TestSinglePackage_MultipleGroups_PrefixWhitespace(t *testing.T) {
 	assert := assert.New(t)
 	s := "i3: system,  boxstrapper"
@@ -139,7 +139,7 @@ func TestSinglePackage_MultipleGroups_PrefixWhitespace(t *testing.T) {
 	assert.Equal("system", packages[0].Groups[0])
 	assert.Equal("boxstrapper", packages[0].Groups[1])
 }
-	
+
 func TestSinglePackage_MultipleGroups_PostfixWhitespace(t *testing.T) {
 	assert := assert.New(t)
 	s := "i3: system, boxstrapper "

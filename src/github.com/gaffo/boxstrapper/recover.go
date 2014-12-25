@@ -1,7 +1,6 @@
 package boxstrapper
 
-import (
-)
+import ()
 
 func Recover(driver Driver, storage Storage) error {
 	strPackages, _ := storage.ReadPackages()

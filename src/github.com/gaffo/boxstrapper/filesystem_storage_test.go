@@ -1,12 +1,12 @@
 package boxstrapper_test
 
 import (
-	"testing"
 	. "github.com/gaffo/boxstrapper"
-  	"github.com/stretchr/testify/assert"
-  	"io/ioutil"
-  	"os"
 	"github.com/libgit2/git2go"
+	"github.com/stretchr/testify/assert"
+	"io/ioutil"
+	"os"
+	"testing"
 )
 
 func cT() {
@@ -71,7 +71,7 @@ func walkRepo(base string, fun git.RevWalkIterator) {
 
 func listCommitMessages(base string) []string {
 	commits := make([]string, 0, 32)
-	walkRepo(base, func (commit *git.Commit) bool {
+	walkRepo(base, func(commit *git.Commit) bool {
 		commits = append(commits, commit.Message())
 		return true
 	})
@@ -80,7 +80,7 @@ func listCommitMessages(base string) []string {
 
 func listCommitFiles(base string) [][]string {
 	files := make([][]string, 0, 32)
-	walkRepo(base, func (commit *git.Commit) bool {
+	walkRepo(base, func(commit *git.Commit) bool {
 		tree, err := commit.Tree()
 		if err != nil {
 			return true

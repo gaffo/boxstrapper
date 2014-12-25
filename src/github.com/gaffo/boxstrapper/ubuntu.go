@@ -2,8 +2,8 @@ package boxstrapper
 
 import (
 	"fmt"
-	"os/exec"
 	"io/ioutil"
+	"os/exec"
 )
 
 type UbuntuDriver struct {

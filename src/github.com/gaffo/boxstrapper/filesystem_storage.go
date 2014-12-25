@@ -1,19 +1,19 @@
 package boxstrapper
 
 import (
-	"io/ioutil"
-	"os"
 	"fmt"
 	"github.com/libgit2/git2go"
-	"time"
+	"io/ioutil"
 	"log"
+	"os"
+	"time"
 )
 
 type FilesystemStorage struct {
 	BaseDir string
 }
 
-func NewFilesystemStorage(basedir string) (*FilesystemStorage) {
+func NewFilesystemStorage(basedir string) *FilesystemStorage {
 	storage := new(FilesystemStorage)
 	if basedir == "" {
 		storage.BaseDir = boxstrap_dir()
@@ -36,7 +36,7 @@ func (this *FilesystemStorage) packagesFile() string {
 	return this.path("packages.bss")
 }
 
-func (this *FilesystemStorage) ensureRepo() (* git.Repository, error) {
+func (this *FilesystemStorage) ensureRepo() (*git.Repository, error) {
 	if _, err := os.Stat(this.BaseDir); err != nil {
 		err = os.Mkdir(this.BaseDir, os.ModePerm)
 		if err != nil {
@@ -47,7 +47,7 @@ func (this *FilesystemStorage) ensureRepo() (* git.Repository, error) {
 		fmt.Printf("Creating repository at %s\n", this.BaseDir)
 		repo, err := git.InitRepository(this.BaseDir, false)
 		if err != nil {
-			return nil,err
+			return nil, err
 		}
 		return repo, nil
 	}
@@ -81,8 +81,8 @@ func (this *FilesystemStorage) WritePackages(contents string, reason string) err
 	defer repo.Free()
 
 	err = ioutil.WriteFile(
-		this.packagesFile(), 
-		[]byte(contents), 
+		this.packagesFile(),
+		[]byte(contents),
 		0666)
 
 	if err != nil {
@@ -118,9 +118,9 @@ func (this *FilesystemStorage) WritePackages(contents string, reason string) err
 	}
 
 	sig := &git.Signature{
-		Name: name,
+		Name:  name,
 		Email: email,
-		When: time.Now(),
+		When:  time.Now(),
 	}
 
 	currentBranch, _ := repo.Head()
@@ -134,7 +134,7 @@ func (this *FilesystemStorage) WritePackages(contents string, reason string) err
 		return nil
 	}
 
-	// We're on a repo with some commits 
+	// We're on a repo with some commits
 
 	currentTip, _ := repo.LookupCommit(currentBranch.Target())
 	if err != nil {
@@ -144,7 +144,7 @@ func (this *FilesystemStorage) WritePackages(contents string, reason string) err
 
 	commit, _ := repo.CreateCommit("HEAD", sig, sig, reason, tree, currentTip)
 	log.Printf("%s now at revision %s\n", this.BaseDir, commit)
-	idx.Write()	
+	idx.Write()
 
 	return nil
 }

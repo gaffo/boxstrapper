@@ -1,10 +1,10 @@
 package boxstrapper_test
 
 import (
-	"testing"
 	. "github.com/gaffo/boxstrapper"
-  	"github.com/stretchr/testify/assert"
-  	"github.com/gaffo/boxstrapper/mocks"
+	"github.com/gaffo/boxstrapper/mocks"
+	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestRecoverNoPackages(t *testing.T) {

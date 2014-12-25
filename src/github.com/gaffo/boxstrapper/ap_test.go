@@ -1,10 +1,10 @@
 package boxstrapper_test
 
 import (
-	"testing"
 	. "github.com/gaffo/boxstrapper"
-  	"github.com/stretchr/testify/assert"
-  	"github.com/gaffo/boxstrapper/mocks"
+	"github.com/gaffo/boxstrapper/mocks"
+	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestApCallsToDriver(t *testing.T) {
@@ -17,7 +17,7 @@ func TestApCallsToDriver(t *testing.T) {
 	storage := new(mocks.Storage)
 	storage.On("ReadPackages").Return("", nil)
 	storage.On("WritePackages", "package1: default").Return(nil).Once()
-	
+
 	err := Ap(driver, storage, packages)
 
 	assert.Nil(err)
@@ -37,7 +37,7 @@ func TestApCallsToDriver_MultiplePackages(t *testing.T) {
 	storage.On("ReadPackages").Return("", nil)
 	storage.On("WritePackages", `package1: default
 package2: default`).Return(nil).Once()
-	
+
 	err := Ap(driver, storage, packages)
 
 	assert.Nil(err)
@@ -57,7 +57,7 @@ func TestApCallsToDriver_MultiplePackages_UnsortedPackages(t *testing.T) {
 	storage.On("ReadPackages").Return("", nil)
 	storage.On("WritePackages", `package1: default
 package2: default`).Return(nil).Once()
-	
+
 	err := Ap(driver, storage, packages)
 
 	assert.Nil(err)
@@ -75,7 +75,7 @@ func TestApCallsToDriver_WithSingleGroup(t *testing.T) {
 	storage := new(mocks.Storage)
 	storage.On("ReadPackages").Return("", nil)
 	storage.On("WritePackages", "package1: system").Return(nil).Once()
-	
+
 	err := Ap(driver, storage, packages)
 
 	assert.Nil(err)
@@ -95,7 +95,7 @@ func TestApCallsToDriver_MultiplePackages_WithSingleGroup(t *testing.T) {
 	storage.On("ReadPackages").Return("", nil)
 	storage.On("WritePackages", `package1: george
 package2: system`).Return(nil).Once()
-	
+
 	err := Ap(driver, storage, packages)
 
 	assert.Nil(err)
@@ -115,7 +115,7 @@ func TestApCallsToDriver_MultiplePackages_UnsortedPackages_WithSingleGroup(t *te
 	storage.On("ReadPackages").Return("", nil)
 	storage.On("WritePackages", `package1: george
 package2: system`).Return(nil).Once()
-	
+
 	err := Ap(driver, storage, packages)
 
 	assert.Nil(err)
@@ -134,7 +134,7 @@ func TestAp_WithDifferentPreexisting_DoesntLosePrexisting(t *testing.T) {
 	storage.On("ReadPackages").Return("package2: default", nil)
 	storage.On("WritePackages", `package1: default
 package2: default`).Return(nil).Once()
-	
+
 	err := Ap(driver, storage, packages)
 
 	assert.Nil(err)
@@ -152,7 +152,7 @@ func TestAp_PreExistingGroup_IsntAddedToFile(t *testing.T) {
 	storage := new(mocks.Storage)
 	storage.On("ReadPackages").Return("package1", nil)
 	storage.On("WritePackages", `package1: default`).Return(nil).Once()
-	
+
 	err := Ap(driver, storage, packages)
 
 	assert.Nil(err)
@@ -170,7 +170,7 @@ func TestAp_PreExistingPackage_NewGroup_MergesGroups(t *testing.T) {
 	storage := new(mocks.Storage)
 	storage.On("ReadPackages").Return("package1: default", nil)
 	storage.On("WritePackages", `package1: default, system`).Return(nil).Once()
-	
+
 	err := Ap(driver, storage, packages)
 
 	assert.Nil(err)
