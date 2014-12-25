@@ -100,3 +100,24 @@ For now boxstrap isn't going to allow extension. It's all packaged. All ofthe ex
 Developing
 ============
 Rule #1, Boxstrap is completely TDD. You want to add to it, you have to do this. Look at the history from the beginning. Othern than the ubntu and simple early filesystem drivers (which later got tested as it grew past a single file wrapper), the entire app is driven out with each commit being a test / feature pair. I'm continuing this. If you want to add to boxstrap, you'll do so too.
+
+Anyway:
+
+if you haven't setup a GOPATH yet:
+
+```
+mkdir -p ~/go
+cd ~/go
+export GOPATH=`pwd`
+```
+
+for everything:
+
+```
+cd $GOPATH
+go get github.com/gaffo/boxstrapper
+cd github.com/gaffo/boxstrapper
+make
+```
+
+It'll take a bit to download the deps but once it does you should be good to go.
