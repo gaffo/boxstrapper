@@ -6,3 +6,5 @@ bs
 mockery
 bin
 README.html
+*.png
+*.dot
