@@ -11,7 +11,7 @@ all: $(lg2static) $(testdeps)
 	go generate
 	go fmt
 	go test github.com/gaffo/boxstrapper/...
-	go install github.com/gaffo/boxstrapper
+	go install github.com/gaffo/boxstrapper/...
 
 $(testdeps):
 	go get -u -t

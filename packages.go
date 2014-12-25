@@ -66,7 +66,10 @@ func (this Packages) String() string {
 }
 
 func ParsePackages(contents string) []Package {
-	ops, _ := ops_parser.ParseOps(contents)
+	ops, err := ops_parser.ParseOps(contents)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	packages := make([]Package, 0, len(ops))
 

@@ -82,7 +82,7 @@ import (
   # parameters are alnumbers and some path possiblities,
   # may have to expand this to everything except )
   # on every ($) one of these, call char action
-  p = (alnum | '/' | '.' | '~') $char;
+  p = (alnum | '/' | '.' | '~' | '-') $char;
 
   # param is one or me Ps. When we finish this state (%)
   # call param action

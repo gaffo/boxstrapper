@@ -216,7 +216,7 @@ tr3:
 		}
 		switch {
 		case data[p] < 65:
-			if 46 <= data[p] && data[p] <= 57 {
+			if 45 <= data[p] && data[p] <= 57 {
 				goto tr4
 			}
 		case data[p] > 90:
@@ -251,7 +251,7 @@ tr4:
 		}
 		switch {
 		case data[p] < 65:
-			if 46 <= data[p] && data[p] <= 57 {
+			if 45 <= data[p] && data[p] <= 57 {
 				goto tr4
 			}
 		case data[p] > 90:
@@ -524,7 +524,7 @@ tr14:
 		}
 		switch {
 		case data[p] < 65:
-			if 46 <= data[p] && data[p] <= 57 {
+			if 45 <= data[p] && data[p] <= 57 {
 				goto tr15
 			}
 		case data[p] > 90:
@@ -559,7 +559,7 @@ tr15:
 		}
 		switch {
 		case data[p] < 65:
-			if 46 <= data[p] && data[p] <= 57 {
+			if 45 <= data[p] && data[p] <= 57 {
 				goto tr15
 			}
 		case data[p] > 90:
@@ -615,7 +615,7 @@ tr17:
 		}
 		switch {
 		case data[p] < 65:
-			if 46 <= data[p] && data[p] <= 57 {
+			if 45 <= data[p] && data[p] <= 57 {
 				goto tr15
 			}
 		case data[p] > 90:
@@ -700,7 +700,7 @@ tr6:
 		}
 		switch {
 		case data[p] < 65:
-			if 46 <= data[p] && data[p] <= 57 {
+			if 45 <= data[p] && data[p] <= 57 {
 				goto tr4
 			}
 		case data[p] > 90:
