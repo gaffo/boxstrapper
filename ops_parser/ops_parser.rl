@@ -128,7 +128,7 @@ type Op struct {
   Depends []Dep
 }
 
-func ParsePackages(data string) ([]Op, error) {
+func ParseOps(data string) ([]Op, error) {
   // Declare std operating variables for the parser, ?, pointer, point end
   cs, p, pe := 0, 0, len(data)
   eof := pe

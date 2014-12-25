@@ -12,7 +12,7 @@ import (
 )
 
 func helper(input string, pkgs []Op, t *testing.T) {
-	v, e := ParsePackages(input)
+	v, e := ParseOps(input)
 	if e != nil {
 		t.Fatalf("Errored on %s: %s", input, e)
 	}
@@ -69,7 +69,7 @@ func helper(input string, pkgs []Op, t *testing.T) {
 }
 
 func errorTest(input, expected string, t *testing.T) {
-	_, e := ParsePackages(input)
+	_, e := ParseOps(input)
 	if e == nil {
 		t.Fatalf("Expected parse error")
 	}
