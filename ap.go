@@ -6,41 +6,43 @@ import (
 	"strings"
 )
 
-func Ap(driver Driver, storage Storage, packages []string) error {
+func PackageFromApString(op string) *Package {
+	parts := strings.Split(op, ":")
+	if len(parts) == 1 {
+		return &Package{Name: parts[0], Groups: []string{"default"}}
+	}
+	return &Package{Name: parts[0], Groups: strings.Split(parts[1], ",")}
+}
+
+func Ap(driver Driver, storage PackagesStorage, packages []string) error {
 	// Load prevoius packages
-	strPrexist, _ := storage.ReadPackages()
-	mpPkgnamePkg := make(map[string]Package)
-	aPackages := ParsePackages(strPrexist)
+	mpPkgnamePkg := make(map[string]*Package)
+	aPackages, _ := storage.ReadPackages()
 	for _, pkg := range aPackages {
-		mpPkgnamePkg[pkg.Package] = pkg
+		mpPkgnamePkg[pkg.Name] = pkg
 	}
 
-	// Install Packages
+	// Install Operations
+	aAddedPackages := make([]string, 0, len(packages))
 	for _, pkgStr := range packages {
 		pkg := PackageFromApString(pkgStr)
-		driver.AddPackage(pkg.Package)
-		if oldPkg, ok := mpPkgnamePkg[pkg.Package]; ok {
-			pkg.Groups = append(oldPkg.Groups, pkg.Groups...)
+		driver.AddPackage(pkg.Name)
+		if oldPkg, ok := mpPkgnamePkg[pkg.Name]; ok {
+			oldPkg.Groups = append(oldPkg.Groups, pkg.Groups...)
+		} else {
+			aPackages = append(aPackages, pkg)
 		}
-		mpPkgnamePkg[pkg.Package] = pkg
+		mpPkgnamePkg[pkg.Name] = pkg
+		aAddedPackages = append(aAddedPackages, pkg.Name)
 	}
 
-	// sort the packages
-	aPackages = make([]Package, 0, len(mpPkgnamePkg))
-	for _, pkg := range mpPkgnamePkg {
-		aPackages = append(aPackages, pkg)
-	}
-	sort.Sort(ByPackageName(aPackages))
+	// get package names and sort them
+	sort.Strings(aAddedPackages)
 
 	// output the packages to file again
-	sRet := ""
-	for i, pkg := range aPackages {
-		if i != 0 {
-			sRet += "\n"
-		}
-		sRet += pkg.String()
-	}
-	storage.WritePackages(sRet, fmt.Sprintf("ap %s", strings.Join(packages, ", ")))
+	storage.WritePackages(
+		aPackages,
+		fmt.Sprintf("added packages: %s", strings.Join(aAddedPackages, ", ")))
 
 	return nil
 }

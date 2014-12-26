@@ -6,7 +6,7 @@ type Storage struct {
 	mock.Mock
 }
 
-func (m *Storage) ReadPackages() (string, error) {
+func (m *Storage) ReadOpsfile() (string, error) {
 	ret := m.Called()
 
 	r0 := ret.Get(0).(string)
@@ -14,8 +14,8 @@ func (m *Storage) ReadPackages() (string, error) {
 
 	return r0, r1
 }
-func (m *Storage) WritePackages(contents, reason string) error {
-	ret := m.Called(contents)
+func (m *Storage) WriteOpsfile(contents string, reason string) error {
+	ret := m.Called(contents, reason)
 
 	r0 := ret.Error(0)
 

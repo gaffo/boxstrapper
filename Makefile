@@ -5,13 +5,18 @@ git2go = $(GOPATH)/src/github.com/libgit2/git2go
 lg2dir = $(GOPATH)/src/github.com/libgit2/git2go/vendor
 bsdir = $(GOPATH)/src/github.com/gaffo/boxstrapper
 testdeps = $(GOPATH)/src/github.com/stretchr
+mockery = $(GOPATH)/bin/mockery
 
-all: $(lg2static) $(testdeps)
+all: $(lg2static) $(testdeps) $(mockery)
 	cd $(bsdir)
 	go generate
 	go fmt
 	go test github.com/gaffo/boxstrapper/...
 	go install github.com/gaffo/boxstrapper/...
+
+$(mockery):
+	go get github.com/vektra/mockery
+	go install github.com/vektra/mockery
 
 $(testdeps):
 	go get -u -t

@@ -11,8 +11,15 @@ func Test_WatchNoArgs_DoesNothing(t *testing.T) {
 	assert := assert.New(t)
 
 	driver := new(mocks.Driver)
-	storage := new(mocks.Storage)
+	storage := new(mocks.OperationsStorage)
 
 	err := Watch(driver, storage, []string{})
 	assert.Nil(err)
 }
+
+// func Test_WatchFile_NoPackages_Watches(t *testing.T) {
+// 	assert := assert.New(t)
+
+// 	driver := new(mocks.Driver)
+// 	storage := new(mocks.Storage)
+// }

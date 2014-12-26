@@ -2,6 +2,7 @@ package boxstrapper_test
 
 import (
 	. "github.com/gaffo/boxstrapper"
+	"github.com/gaffo/boxstrapper/mocks"
 	"github.com/libgit2/git2go"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
@@ -97,16 +98,16 @@ func listCommitFiles(base string) [][]string {
 	return files
 }
 
-func TestReadPackages_EmptyRepo(t *testing.T) {
+func TestReadOpsfile_EmptyRepo(t *testing.T) {
 	assert := assert.New(t)
 	storage := NewFilesystemStorage("/nonexistent")
 
-	data, err := storage.ReadPackages()
+	data, err := storage.ReadOpsfile()
 	assert.NotNil(err)
 	assert.Equal("", data)
 }
 
-func TestReadPackages_RepoWithPackagefile(t *testing.T) {
+func TestReadOpsfile_RepoWithPackagefile(t *testing.T) {
 	assert := assert.New(t)
 	defer cT()
 	_ = os.MkdirAll("tmp", os.ModePerm)
@@ -114,17 +115,17 @@ func TestReadPackages_RepoWithPackagefile(t *testing.T) {
 
 	storage := NewFilesystemStorage("tmp")
 
-	data, err := storage.ReadPackages()
+	data, err := storage.ReadOpsfile()
 	assert.Nil(err)
 	assert.Equal(`contents`, data)
 }
 
-func TestWritePackages_NoRepo(t *testing.T) {
+func TestWriteOpsfile_NoRepo(t *testing.T) {
 	assert := assert.New(t)
 	defer cT()
 
 	storage := NewFilesystemStorage("tmp")
-	err := storage.WritePackages("packages", "reason")
+	err := storage.WriteOpsfile("packages", "reason")
 	assert.Nil(err)
 
 	assert.True(fileExists("tmp"))
@@ -135,13 +136,13 @@ func TestWritePackages_NoRepo(t *testing.T) {
 	assert.Equal([][]string{{"packages.bss"}}, listCommitFiles("tmp"))
 }
 
-func TestWritePackages_MultiplePackages(t *testing.T) {
+func TestWriteOpsfile_MultiplePackages(t *testing.T) {
 	assert := assert.New(t)
 	defer cT()
 
 	storage := NewFilesystemStorage("tmp")
-	assert.Nil(storage.WritePackages("packages", "reason"))
-	assert.Nil(storage.WritePackages("packages packages", "reason2"))
+	assert.Nil(storage.WriteOpsfile("packages", "reason"))
+	assert.Nil(storage.WriteOpsfile("packages packages", "reason2"))
 
 	assert.True(fileExists("tmp"))
 	assert.True(fileExists("tmp/packages.bss"))
@@ -149,4 +150,34 @@ func TestWritePackages_MultiplePackages(t *testing.T) {
 	assert.Equal("packages packages", fileContents("tmp/packages.bss"))
 	assert.Equal([]string{"reason2", "reason"}, listCommitMessages("tmp"))
 	assert.Equal([][]string{{"packages.bss"}, {"packages.bss"}}, listCommitFiles("tmp"))
+}
+
+func Test_OperationsFilesystem_Nothing(t *testing.T) {
+	storage := new(mocks.Storage)
+	storage.On("WriteOpsfile", "", "reason").Return(nil)
+	os := NewOperationsStorage(storage)
+
+	os.WriteOperations([]*Operation{}, "reason")
+
+	storage.Mock.AssertExpectations(t)
+}
+
+func Test_OperationsFilesystem_SingleOperation(t *testing.T) {
+	ops := []*Operation{
+		&Operation{
+			Name:   "name",
+			Params: []string{"p1", "p2", "p3"},
+			Groups: []string{"g2", "g1"}},
+	}
+
+	storage := new(mocks.Storage)
+	storage.On(
+		"WriteOpsfile",
+		"name(p1, p2, p3): g1, g2",
+		"reason").Return(nil)
+	os := NewOperationsStorage(storage)
+
+	os.WriteOperations(ops, "reason")
+
+	storage.Mock.AssertExpectations(t)
 }

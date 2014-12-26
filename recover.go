@@ -2,11 +2,12 @@ package boxstrapper
 
 import ()
 
-func Recover(driver Driver, storage Storage) error {
-	strPackages, _ := storage.ReadPackages()
+func Recover(driver Driver, storage OperationsStorage) error {
+	operations, _ := storage.ReadOperations()
 
-	for _, pkg := range ParsePackages(strPackages) {
-		driver.AddPackage(pkg.Package)
+	for _, op := range operations {
+		pkg, _ := PackageFromOperation(op)
+		driver.AddPackage(pkg.Name)
 	}
 
 	return nil

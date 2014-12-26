@@ -1,11 +1,13 @@
 package boxstrapper
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/libgit2/git2go"
 	"io/ioutil"
 	"log"
 	"os"
+	"sort"
 	"time"
 )
 
@@ -54,7 +56,7 @@ func (this *FilesystemStorage) ensureRepo() (*git.Repository, error) {
 	return git.OpenRepository(this.BaseDir)
 }
 
-func (this *FilesystemStorage) ReadPackages() (string, error) {
+func (this *FilesystemStorage) ReadOpsfile() (string, error) {
 	bytes, err := ioutil.ReadFile(this.packagesFile())
 
 	if err != nil {
@@ -72,7 +74,7 @@ func config_str(repo *git.Repository, key string) (string, error) {
 	return config.LookupString(key)
 }
 
-func (this *FilesystemStorage) WritePackages(contents string, reason string) error {
+func (this *FilesystemStorage) WriteOpsfile(contents, reason string) error {
 	repo, err := this.ensureRepo()
 	if err != nil {
 		fmt.Println("ensureRepo", err)
@@ -146,5 +148,59 @@ func (this *FilesystemStorage) WritePackages(contents string, reason string) err
 	log.Printf("%s now at revision %s\n", this.BaseDir, commit)
 	idx.Write()
 
+	return nil
+}
+
+type OperationsStorageImpl struct {
+	storage Storage
+}
+
+func NewOperationsStorage(storage Storage) *OperationsStorageImpl {
+	return &OperationsStorageImpl{storage: storage}
+}
+
+func (this *OperationsStorageImpl) ReadOperations() ([]*Operation, error) {
+	return nil, nil
+}
+
+func (this *OperationsStorageImpl) WriteOperations(ops []*Operation, reason string) error {
+	var buf bytes.Buffer
+	for i, op := range ops {
+		if i != 0 {
+			buf.WriteString("\n")
+		}
+		buf.WriteString(op.Name)
+		buf.WriteString("(")
+		for i, param := range op.Params {
+			if i != 0 {
+				buf.WriteString(", ")
+			}
+			buf.WriteString(param)
+		}
+		buf.WriteString("): ")
+		sort.Strings(op.Groups)
+		for i, group := range op.Groups {
+			if i != 0 {
+				buf.WriteString(", ")
+			}
+			buf.WriteString(group)
+		}
+	}
+	return this.storage.WriteOpsfile(buf.String(), reason)
+}
+
+type PackagesStorageImpl struct {
+	storage OperationsStorage
+}
+
+func NewPackagesStorage(storage OperationsStorage) *PackagesStorageImpl {
+	return &PackagesStorageImpl{storage: storage}
+}
+
+func (this *PackagesStorageImpl) ReadPackages() ([]*Package, error) {
+	return nil, nil
+}
+
+func (this *PackagesStorageImpl) WritePackages(packages []*Package, reason string) error {
 	return nil
 }

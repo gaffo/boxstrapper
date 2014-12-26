@@ -9,6 +9,16 @@ type Driver interface {
 }
 
 type Storage interface {
-	ReadPackages() (string, error)
-	WritePackages(contents, reason string) error
+	ReadOpsfile() (string, error)
+	WriteOpsfile(contents string, reason string) error
+}
+
+type OperationsStorage interface {
+	ReadOperations() ([]*Operation, error)
+	WriteOperations([]*Operation, string) error
+}
+
+type PackagesStorage interface {
+	ReadPackages() ([]*Package, error)
+	WritePackages([]*Package, string) error
 }
