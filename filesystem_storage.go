@@ -190,7 +190,8 @@ func (this *OperationsStorageImpl) WriteOperations(ops []*Operation, reason stri
 }
 
 type PackagesStorageImpl struct {
-	storage OperationsStorage
+	storage    OperationsStorage
+	operations []*Operation
 }
 
 func NewPackagesStorage(storage OperationsStorage) *PackagesStorageImpl {
@@ -198,7 +199,20 @@ func NewPackagesStorage(storage OperationsStorage) *PackagesStorageImpl {
 }
 
 func (this *PackagesStorageImpl) ReadPackages() ([]*Package, error) {
-	return nil, nil
+	operations, err := this.storage.ReadOperations()
+	if err != nil {
+		return nil, err
+	}
+	this.operations = operations
+	packages := make([]*Package, 0, len(this.operations))
+	for _, op := range this.operations {
+		pkg, err := PackageFromOperation(op)
+		if err != nil {
+			continue
+		}
+		packages = append(packages, pkg)
+	}
+	return packages, nil
 }
 
 func (this *PackagesStorageImpl) WritePackages(packages []*Package, reason string) error {

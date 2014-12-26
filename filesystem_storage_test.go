@@ -192,11 +192,35 @@ func Test_PackagesFilesystem_OperationNotPackage(t *testing.T) {
 	}
 
 	storage := new(mocks.OperationsStorage)
-	storage.On("ReadPackages").Return(ops, nil).Once()
+	storage.On("ReadOperations").Return(ops, nil).Once()
 
 	pf := NewPackagesStorage(storage)
 
 	packages, err := pf.ReadPackages()
 	assert.Nil(err)
+	assert.NotNil(packages)
 	assert.Equal(0, len(packages))
+}
+
+func Test_PackagesFilesystem_OperationPackage(t *testing.T) {
+	assert := assert.New(t)
+	ops := []*Operation{
+		&Operation{
+			Name:   "package",
+			Params: []string{"pkg"},
+			Groups: []string{"g1"}},
+	}
+
+	storage := new(mocks.OperationsStorage)
+	storage.On("ReadOperations").Return(ops, nil).Once()
+
+	pf := NewPackagesStorage(storage)
+
+	packages, err := pf.ReadPackages()
+	assert.Nil(err)
+	assert.NotNil(packages)
+	assert.Equal(1, len(packages))
+	assert.Equal("pkg", packages[0].Name)
+	assert.Equal(1, len(packages[0].Groups))
+	assert.Equal("g1", packages[0].Groups[0])
 }
