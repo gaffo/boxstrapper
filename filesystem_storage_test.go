@@ -181,3 +181,22 @@ func Test_OperationsFilesystem_SingleOperation(t *testing.T) {
 
 	storage.Mock.AssertExpectations(t)
 }
+
+func Test_PackagesFilesystem_OperationNotPackage(t *testing.T) {
+	assert := assert.New(t)
+	ops := []*Operation{
+		&Operation{
+			Name:   "watch",
+			Params: []string{"pkg1"},
+			Groups: []string{"g1"}},
+	}
+
+	storage := new(mocks.OperationsStorage)
+	storage.On("ReadPackages").Return(ops, nil).Once()
+
+	pf := NewPackagesStorage(storage)
+
+	packages, err := pf.ReadPackages()
+	assert.Nil(err)
+	assert.Equal(0, len(packages))
+}
