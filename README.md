@@ -103,20 +103,35 @@ Rule #1, Boxstrap is completely TDD. You want to add to it, you have to do this.
 
 Anyway:
 
+if you don't have go installed:
+
+```
+sudo chmod a+w /usr/local/src
+pushd /usr/local/src
+wget https://storage.googleapis.com/golang/go1.6.2.linux-amd64.tar.gz 
+tar xf go1.6.2.linux-amd64.tar.gz
+pushd go
+export GOROOT=`pwd`
+export PATH=$GOROOT/bin:$PATH
+popd
+popd
+```
+
 if you haven't setup a GOPATH yet:
 
 ```
-mkdir -p ~/go
-cd ~/go
+mkdir -p ~/ws-bs
+cd ~/ws-bs
 export GOPATH=`pwd`
 ```
 
-for everything:
+to get boxstrap and libgit2:
 
 ```
 cd $GOPATH
-go get github.com/gaffo/boxstrapper
-cd github.com/gaffo/boxstrapper
+sudo apt-get install libgit2-dev ragel graphviz
+go get github.com/gaffo/boxstrapper || true
+cd src/github.com/gaffo/boxstrapper
 make
 ```
 
